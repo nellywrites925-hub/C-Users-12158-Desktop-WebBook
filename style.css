@@ -7,17 +7,17 @@
 
 :root {
   /* Custom brand palette provided by user */
-  --brand-purple: #BF00FF; /* primary magenta/purple */
-  --brand-bright-purple: #BF00FF;
-  --brand-purple-100: #F8F4FF; /* soft light purple for nav/background accents */
-  --brand-light-purple: #F8F4FF;
-  --brand-gold: #D4AF37;
-  --brand-purple-700: #010B13; /* deep near-black for strong contrast */
+  --brand-purple: #bf00ff; /* primary magenta/purple */
+  --brand-bright-purple: #bf00ff;
+  --brand-purple-100: #f8f4ff; /* soft light purple for nav/background accents */
+  --brand-light-purple: #f8f4ff;
+  --brand-gold: #d4af37;
+  --brand-purple-700: #010b13; /* deep near-black for strong contrast */
   --brand-purple-shadow: rgba(191, 0, 255, 0.16);
-  --brand-black: #010B13;
-  --bg-color: #010B13;
-  --text-color: #F8F8FF;
-  --muted-color: #F8F4FF;
+  --brand-black: #010b13;
+  --bg-color: #010b13;
+  --text-color: #f8f8ff;
+  --muted-color: #f8f4ff;
 }
 
 .header-inner {
@@ -34,7 +34,7 @@
   z-index: 1010;
 }
 .header-left .nav-button {
-  background: rgba(255,255,255,0.08);
+  background: rgba(255, 255, 255, 0.08);
   color: #fff;
   border: none;
   padding: 6px 10px;
@@ -133,11 +133,13 @@
   height: 8px;
 }
 .nav-scroll::-webkit-scrollbar-thumb {
-  background: rgba(107,33,168,0.3);
+  background: rgba(107, 33, 168, 0.3);
   border-radius: 4px;
 }
 .nav-item {
-  color: var(--brand-purple-700); /* darker purple for contrast on light nav background */
+  color: var(
+    --brand-purple-700
+  ); /* darker purple for contrast on light nav background */
   text-decoration: none;
   padding: 6px 10px;
   white-space: nowrap;
@@ -225,7 +227,7 @@ footer {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(255,255,255,0.06);
+  background: rgba(255, 255, 255, 0.06);
 }
 .upload-thumb img,
 .upload-thumb video {
@@ -241,7 +243,7 @@ footer {
   align-items: center;
 }
 .thumb-delete {
-  background: rgba(0,0,0,0.18);
+  background: rgba(0, 0, 0, 0.18);
   color: #fff;
   border: none;
   padding: 6px 8px;
@@ -258,7 +260,7 @@ body.light #diagnostics,
 body.light .drop-area {
   background: var(--brand-purple) !important;
   color: #fff !important;
-  border-color: rgba(255,255,255,0.06) !important;
+  border-color: rgba(255, 255, 255, 0.06) !important;
 }
 
 /* Admin specific tweaks */
@@ -284,7 +286,11 @@ body.light .drop-area {
   gap: 8px;
 }
 .toast {
-  background: linear-gradient(180deg, rgba(107,33,168,0.95), rgba(124,58,237,0.92));
+  background: linear-gradient(
+    180deg,
+    rgba(107, 33, 168, 0.95),
+    rgba(124, 58, 237, 0.92)
+  );
   color: #fff;
   padding: 10px 14px;
   border-radius: 8px;
@@ -337,25 +343,33 @@ body.light .drop-area {
 .nav-button:hover,
 .upload-button:hover,
 .contact-form button:hover {
-  box-shadow: 0 6px 20px rgba(107,33,168,0.14);
+  box-shadow: 0 6px 20px rgba(107, 33, 168, 0.14);
   transform: translateY(-1px);
 }
 
 /* Make small badges use purple */
 .creation-card .badge .b {
-  background: linear-gradient(90deg, rgba(107,33,168,0.95), rgba(124,58,237,0.95));
+  background: linear-gradient(
+    90deg,
+    rgba(107, 33, 168, 0.95),
+    rgba(124, 58, 237, 0.95)
+  );
   color: #fff;
 }
 
 /* Logo emphasis border */
 .logo::after {
-  content: '';
+  content: "";
   display: block;
   height: 4px;
   width: 100%;
   border-radius: 4px;
   margin-top: 6px;
-  background: linear-gradient(90deg, var(--brand-purple), var(--brand-bright-purple));
+  background: linear-gradient(
+    90deg,
+    var(--brand-purple),
+    var(--brand-bright-purple)
+  );
   opacity: 0.95;
 }
 .contact-form .muted {
@@ -584,14 +598,19 @@ body {
 
 /* strong overlay for content readability over background images */
 body::before {
-  content: '';
+  content: "";
   position: fixed;
   inset: 0;
-  background: linear-gradient(rgba(0,0,0,0.58), rgba(0,0,0,0.58));
+  background: linear-gradient(rgba(0, 0, 0, 0.58), rgba(0, 0, 0, 0.58));
   pointer-events: none;
   z-index: 0;
 }
-.site-header, main, footer { position: relative; z-index: 1; }
+.site-header,
+main,
+footer {
+  position: relative;
+  z-index: 1;
+}
 
 /* Light theme overrides */
 body.light {
@@ -670,7 +689,7 @@ body:not(.light) .nav-button,
 body:not(.light) .upload-button.secondary {
   /* keep nav text dark even in dark layout so it contrasts against the light nav bar */
   color: #2b0048; /* dark purple */
-  border-color: rgba(43,0,72,0.06);
+  border-color: rgba(43, 0, 72, 0.06);
 }
 
 /* Also ensure nav text is dark on light theme explicitly */
@@ -697,14 +716,14 @@ body:not(.light) #creators-list .creators-ol li {
 /* If creators are rendered as cards, make sure card backgrounds are dark panels */
 body:not(.light) .creator-card,
 body:not(.light) .creator-highlight {
-  background: rgba(255,255,255,0.03);
+  background: rgba(255, 255, 255, 0.03);
   color: var(--text-color);
-  border: 1px solid rgba(255,255,255,0.05);
+  border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 /* Modal comment text */
 body:not(.light) #modal-comments .comment {
-  background: rgba(255,255,255,0.03);
+  background: rgba(255, 255, 255, 0.03);
   color: var(--text-color);
 }
 
@@ -764,7 +783,7 @@ body.light .creation-card .badge .b {
   border-radius: 8px;
   overflow: auto;
   text-align: center;
-  box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
 }
 .creation-modal-inner video,
 .creation-modal-inner img,
@@ -803,9 +822,11 @@ body.light .creation-card .badge .b {
 }
 
 @media (max-width: 700px) {
-
-/* modal control numeric badges */
-.modal-controls .count { margin-left:6px; font-weight:700; }
+  /* modal control numeric badges */
+  .modal-controls .count {
+    margin-left: 6px;
+    font-weight: 700;
+  }
 
   .featured-row {
     flex-direction: column;

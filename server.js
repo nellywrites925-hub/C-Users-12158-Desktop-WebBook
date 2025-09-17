@@ -13,18 +13,20 @@ const stripe = Stripe(process.env.STRIPE_SECRET_KEY || "");
 
 const app = express();
 app.use(express.json());
-const session = require('express-session');
-const cookieParser = require('cookie-parser');
+const session = require("express-session");
+const cookieParser = require("cookie-parser");
 
 // Session configuration - requires SESSION_SECRET in environment for production
-const SESS_SECRET = process.env.SESSION_SECRET || 'dev-secret-please-change';
+const SESS_SECRET = process.env.SESSION_SECRET || "dev-secret-please-change";
 app.use(cookieParser());
-app.use(session({
-  secret: SESS_SECRET,
-  resave: false,
-  saveUninitialized: false,
-  cookie: { secure: false, sameSite: 'lax' } // secure should be true behind HTTPS in production
-}));
+app.use(
+  session({
+    secret: SESS_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    cookie: { secure: false, sameSite: "lax" }, // secure should be true behind HTTPS in production
+  })
+);
 
 // Admin token (optional). If set, require this token to access admin pages/endpoints.
 const ADMIN_TOKEN = process.env.ADMIN_TOKEN || "";
@@ -33,20 +35,23 @@ const ADMIN_TOKEN = process.env.ADMIN_TOKEN || "";
 app.use(function (req, res, next) {
   // If ADMIN_TOKEN is not set, allow access (dev mode). Otherwise require session or token.
   if (!ADMIN_TOKEN) return next();
-  var allowed = ['/admin.html', '/admin-login', '/admin-logout'];
+  var allowed = ["/admin.html", "/admin-login", "/admin-logout"];
   if (allowed.indexOf(req.path) !== -1) return next();
   // Session-based auth: check if req.session.isAdmin
   if (req.session && req.session.isAdmin) return next();
   // Fallback: check token in header or query
-  const token = req.headers['x-admin-token'] || req.query.admin_token || '';
+  const token = req.headers["x-admin-token"] || req.query.admin_token || "";
   if (token === ADMIN_TOKEN) return next();
-  res.status(401).send('Unauthorized');
+  res.status(401).send("Unauthorized");
 });
 
 // Admin login endpoint: POST { token } -> sets session if token matches
-app.post('/admin-login', express.json(), function (req, res) {
-  const token = (req.body && req.body.token) || req.query.token || '';
-  if (!ADMIN_TOKEN) return res.status(400).json({ ok: false, error: 'ADMIN_TOKEN not configured on server' });
+app.post("/admin-login", express.json(), function (req, res) {
+  const token = (req.body && req.body.token) || req.query.token || "";
+  if (!ADMIN_TOKEN)
+    return res
+      .status(400)
+      .json({ ok: false, error: "ADMIN_TOKEN not configured on server" });
   if (token === ADMIN_TOKEN) {
     req.session.isAdmin = true;
     return res.json({ ok: true });
@@ -54,7 +59,7 @@ app.post('/admin-login', express.json(), function (req, res) {
   return res.status(401).json({ ok: false });
 });
 
-app.post('/admin-logout', function (req, res) {
+app.post("/admin-logout", function (req, res) {
   if (req.session) req.session.isAdmin = false;
   return res.json({ ok: true });
 });

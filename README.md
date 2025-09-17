@@ -33,6 +33,7 @@ npm start
 ```
 
 4. Visit the site:
+
 - Public pages: `http://localhost:3000/`
 - Admin: `http://localhost:3000/admin.html` (paste your `ADMIN_TOKEN` in the login field to authenticate)
 
@@ -54,6 +55,7 @@ npm start
 - Toggle the per-upload $1 charge for non-subscribers.
 
 ## Files of interest
+
 - `index.html`, `upload.html`, `admin.html` — client pages
 - `script.js` — client logic (IndexedDB, rendering, admin interactions)
 - `style.css` — styling and theming

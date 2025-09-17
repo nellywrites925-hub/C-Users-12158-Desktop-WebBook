@@ -54,8 +54,8 @@ document.addEventListener("DOMContentLoaded", function () {
   var SUB_KEY = "peeksee_subscribed";
   // Dev/testing flag: skip the per-upload $1 confirmation when set to '1'
   var SKIP_PER_UPLOAD_FEE_KEY = "peeksee_skip_per_upload_fee";
-  var PER_UPLOAD_FEE_ENABLED_KEY = 'peeksee_per_upload_fee_enabled';
-  var ADMIN_PASS_HASH_KEY = 'peeksee_admin_pass_hash';
+  var PER_UPLOAD_FEE_ENABLED_KEY = "peeksee_per_upload_fee_enabled";
+  var ADMIN_PASS_HASH_KEY = "peeksee_admin_pass_hash";
 
   function isSubscribed() {
     return localStorage.getItem(SUB_KEY) === "1";
@@ -165,12 +165,12 @@ document.addEventListener("DOMContentLoaded", function () {
   // Background selector (global): mapping and apply helper
   var BG_KEY = "peeksee_bg_url";
   var BG_ATTR = {
-    'https://images.unsplash.com/photo-1517604931442-7f8a3cb81005?q=80&w=1600&auto=format&fit=crop&ixlib=rb-4.0.3&s=1':
-      'Photo: Stage (Unsplash)',
-    'https://images.unsplash.com/photo-1508973378-3a9d0c6a6a23?q=80&w=1600&auto=format&fit=crop&ixlib=rb-4.0.3&s=2':
-      'Photo: Theater stage (Unsplash)',
-    'https://images.unsplash.com/photo-1526403224746-4c5b55a6b892?q=80&w=1600&auto=format&fit=crop&ixlib=rb-4.0.3&s=3':
-      'Photo: Concert stage (Unsplash)'
+    "https://images.unsplash.com/photo-1517604931442-7f8a3cb81005?q=80&w=1600&auto=format&fit=crop&ixlib=rb-4.0.3&s=1":
+      "Photo: Stage (Unsplash)",
+    "https://images.unsplash.com/photo-1508973378-3a9d0c6a6a23?q=80&w=1600&auto=format&fit=crop&ixlib=rb-4.0.3&s=2":
+      "Photo: Theater stage (Unsplash)",
+    "https://images.unsplash.com/photo-1526403224746-4c5b55a6b892?q=80&w=1600&auto=format&fit=crop&ixlib=rb-4.0.3&s=3":
+      "Photo: Concert stage (Unsplash)",
   };
 
   function applyBackground(url) {
@@ -179,29 +179,33 @@ document.addEventListener("DOMContentLoaded", function () {
     var img = new Image();
     img.onload = function () {
       document.body.style.backgroundImage = 'url("' + url + '")';
-      document.body.style.backgroundSize = 'cover';
-      var att = document.querySelector('.bg-attribution');
-      if (att) att.textContent = BG_ATTR[url] || 'Background image: Unsplash (temporary)';
+      document.body.style.backgroundSize = "cover";
+      var att = document.querySelector(".bg-attribution");
+      if (att)
+        att.textContent =
+          BG_ATTR[url] || "Background image: Unsplash (temporary)";
     };
     img.onerror = function () {
-      console.warn('Failed to load background image:', url);
+      console.warn("Failed to load background image:", url);
       // remove saved bad url so it won't be retried repeatedly
-      try { localStorage.removeItem(BG_KEY); } catch (e) {}
-      showToast('Failed to load saved background — using default');
+      try {
+        localStorage.removeItem(BG_KEY);
+      } catch (e) {}
+      showToast("Failed to load saved background — using default");
     };
     img.src = url;
   }
 
   // Wire buttons and restore saved background after DOM ready
-  document.addEventListener('DOMContentLoaded', function () {
-    var bgChoices = document.querySelectorAll('.bg-choice');
+  document.addEventListener("DOMContentLoaded", function () {
+    var bgChoices = document.querySelectorAll(".bg-choice");
     if (bgChoices && bgChoices.length) {
       bgChoices.forEach(function (b) {
-        b.addEventListener('click', function () {
+        b.addEventListener("click", function () {
           var url = this.dataset.url;
           localStorage.setItem(BG_KEY, url);
           applyBackground(url);
-          showToast('Background updated');
+          showToast("Background updated");
         });
       });
     }
@@ -236,7 +240,8 @@ document.addEventListener("DOMContentLoaded", function () {
     if (isSubscribed()) return Promise.resolve();
     if (!isPerUploadFeeEnabled()) return Promise.resolve();
     // honor dev flag to skip per-upload confirmation
-    if (localStorage.getItem(SKIP_PER_UPLOAD_FEE_KEY) === "1") return Promise.resolve();
+    if (localStorage.getItem(SKIP_PER_UPLOAD_FEE_KEY) === "1")
+      return Promise.resolve();
     return getUploadCount().then(function (count) {
       if (!count || count < 1) return Promise.resolve();
       // user already has at least one upload -> require $1 charge per upload
@@ -279,7 +284,8 @@ document.addEventListener("DOMContentLoaded", function () {
         .catch(function () {
           // fallback: simulate a $1 charge via confirm for local testing
           return new Promise(function (resolve, reject) {
-            if (localStorage.getItem(SKIP_PER_UPLOAD_FEE_KEY) === "1") return resolve();
+            if (localStorage.getItem(SKIP_PER_UPLOAD_FEE_KEY) === "1")
+              return resolve();
             if (
               confirm(
                 "You will be charged $1 for this upload (non-subscriber). Confirm to simulate payment and continue."
@@ -302,9 +308,12 @@ document.addEventListener("DOMContentLoaded", function () {
         var idb = e.target.result;
         // detect missing stores and perform a controlled upgrade if needed
         var missing = [];
-        if (!idb.objectStoreNames.contains(uploadsStore)) missing.push(uploadsStore);
-        if (!idb.objectStoreNames.contains(contactsStore)) missing.push(contactsStore);
-        if (!idb.objectStoreNames.contains(creatorsStore)) missing.push(creatorsStore);
+        if (!idb.objectStoreNames.contains(uploadsStore))
+          missing.push(uploadsStore);
+        if (!idb.objectStoreNames.contains(contactsStore))
+          missing.push(contactsStore);
+        if (!idb.objectStoreNames.contains(creatorsStore))
+          missing.push(creatorsStore);
         if (!missing.length) {
           db = idb;
           resolve(db);
@@ -317,13 +326,22 @@ document.addEventListener("DOMContentLoaded", function () {
         req2.onupgradeneeded = function (ev) {
           var idb2 = ev.target.result;
           if (!idb2.objectStoreNames.contains(uploadsStore)) {
-            idb2.createObjectStore(uploadsStore, { keyPath: 'id', autoIncrement: true });
+            idb2.createObjectStore(uploadsStore, {
+              keyPath: "id",
+              autoIncrement: true,
+            });
           }
           if (!idb2.objectStoreNames.contains(contactsStore)) {
-            idb2.createObjectStore(contactsStore, { keyPath: 'id', autoIncrement: true });
+            idb2.createObjectStore(contactsStore, {
+              keyPath: "id",
+              autoIncrement: true,
+            });
           }
           if (!idb2.objectStoreNames.contains(creatorsStore)) {
-            idb2.createObjectStore(creatorsStore, { keyPath: 'id', autoIncrement: true });
+            idb2.createObjectStore(creatorsStore, {
+              keyPath: "id",
+              autoIncrement: true,
+            });
           }
         };
         req2.onsuccess = function (ev) {
@@ -350,7 +368,12 @@ document.addEventListener("DOMContentLoaded", function () {
   function addFile(name, type, blob, creatorId, uploaderId, deletableUntil) {
     return ensureDBReady().then(function () {
       return new Promise(function (resolve, reject) {
-        console.log('peeksee.addFile start', { name: name, type: type, creatorId: creatorId, uploaderId: uploaderId });
+        console.log("peeksee.addFile start", {
+          name: name,
+          type: type,
+          creatorId: creatorId,
+          uploaderId: uploaderId,
+        });
         // validate size
         if (blob && blob.size && blob.size > MAX_UPLOAD_BYTES)
           return reject(new Error("File exceeds maximum size of 25 MB"));
@@ -373,15 +396,18 @@ document.addEventListener("DOMContentLoaded", function () {
           };
           var req = store.add(item);
           req.onsuccess = function () {
-            console.log('peeksee.addFile success', { id: req.result, name: name });
+            console.log("peeksee.addFile success", {
+              id: req.result,
+              name: name,
+            });
             resolve(req.result);
           };
           req.onerror = function (e) {
-            console.error('peeksee.addFile error', e);
+            console.error("peeksee.addFile error", e);
             reject(e);
           };
         } catch (e) {
-          console.error('peeksee.addFile exception', e);
+          console.error("peeksee.addFile exception", e);
           reject(e);
         }
       });
@@ -421,7 +447,9 @@ document.addEventListener("DOMContentLoaded", function () {
               f.blob.size &&
               f.blob.size > MAX_CONTACT_ATTACHMENT_BYTES
             )
-              return reject(new Error("Contact attachment exceeds 10 MB limit"));
+              return reject(
+                new Error("Contact attachment exceeds 10 MB limit")
+              );
           }
         }
         try {
@@ -642,98 +670,121 @@ document.addEventListener("DOMContentLoaded", function () {
         el.className = "upload-item";
 
         // thumbnail container
-        var thumb = document.createElement('div');
-        thumb.className = 'upload-thumb';
+        var thumb = document.createElement("div");
+        thumb.className = "upload-thumb";
         var url = it.blob ? URL.createObjectURL(it.blob) : it.url || null;
-        if (url && it.type && it.type.indexOf('image/') === 0) {
-          var img = document.createElement('img');
+        if (url && it.type && it.type.indexOf("image/") === 0) {
+          var img = document.createElement("img");
           img.src = url;
           thumb.appendChild(img);
-        } else if (url && it.type && it.type.indexOf('video/') === 0) {
-          var v = document.createElement('video');
+        } else if (url && it.type && it.type.indexOf("video/") === 0) {
+          var v = document.createElement("video");
           v.src = url;
           v.muted = true;
           v.playsInline = true;
           v.loop = true;
           v.autoplay = true;
           thumb.appendChild(v);
-        } else if (url && it.type && it.type.indexOf('audio/') === 0) {
-          var a = document.createElement('div');
-          a.textContent = 'Audio';
+        } else if (url && it.type && it.type.indexOf("audio/") === 0) {
+          var a = document.createElement("div");
+          a.textContent = "Audio";
           thumb.appendChild(a);
         } else {
-          var a = document.createElement('div');
-          a.textContent = it.name ? it.name.split('.').pop().toUpperCase() : 'FILE';
+          var a = document.createElement("div");
+          a.textContent = it.name
+            ? it.name.split(".").pop().toUpperCase()
+            : "FILE";
           thumb.appendChild(a);
         }
 
-  el.appendChild(thumb);
+        el.appendChild(thumb);
 
-        var info = document.createElement('div');
-        info.className = 'info';
-        var title = document.createElement('div');
+        var info = document.createElement("div");
+        info.className = "info";
+        var title = document.createElement("div");
         title.textContent = it.name;
-        var date = document.createElement('div');
-        date.className = 'muted';
+        var date = document.createElement("div");
+        date.className = "muted";
         date.textContent = new Date(it.time).toLocaleString();
         info.appendChild(title);
         info.appendChild(date);
         el.appendChild(info);
 
-        var actions = document.createElement('div');
-        actions.className = 'actions';
+        var actions = document.createElement("div");
+        actions.className = "actions";
 
         // Media controls: Play / Pause / Stop / View (for images/text)
         try {
-          if (it.type && (it.type.indexOf('video/') === 0 || it.type.indexOf('audio/') === 0)) {
-            var playBtn = document.createElement('button');
-            playBtn.className = 'upload-button';
-            playBtn.title = 'Play';
-            playBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 3v18l15-9L5 3z" fill="currentColor"/></svg>';
-            playBtn.addEventListener('click', function () {
+          if (
+            it.type &&
+            (it.type.indexOf("video/") === 0 || it.type.indexOf("audio/") === 0)
+          ) {
+            var playBtn = document.createElement("button");
+            playBtn.className = "upload-button";
+            playBtn.title = "Play";
+            playBtn.innerHTML =
+              '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 3v18l15-9L5 3z" fill="currentColor"/></svg>';
+            playBtn.addEventListener("click", function () {
               // create a transient player in the thumb area if not present
-              var existingPlayer = thumb.querySelector('video, audio');
+              var existingPlayer = thumb.querySelector("video, audio");
               if (existingPlayer) {
                 stopAllMedia();
                 try {
                   var pp = existingPlayer.play();
-                  if (pp && pp.then) pp.catch(function(err){ console.warn('peeksee: play rejected', err); });
-                } catch (e) { console.warn('peeksee: play threw', e); }
+                  if (pp && pp.then)
+                    pp.catch(function (err) {
+                      console.warn("peeksee: play rejected", err);
+                    });
+                } catch (e) {
+                  console.warn("peeksee: play threw", e);
+                }
                 return;
               }
               var src = it.blob ? URL.createObjectURL(it.blob) : it.url || null;
-              if (!src) return showToast('No playable source');
+              if (!src) return showToast("No playable source");
               stopAllMedia();
-              var media = document.createElement(it.type.indexOf('video/') === 0 ? 'video' : 'audio');
+              var media = document.createElement(
+                it.type.indexOf("video/") === 0 ? "video" : "audio"
+              );
               media.src = src;
               media.controls = true;
               media.autoplay = true;
-              media.style.width = '100%';
+              media.style.width = "100%";
               // replace thumb contents temporarily
-              thumb.innerHTML = '';
+              thumb.innerHTML = "";
               thumb.appendChild(media);
               // when media ends, restore the thumbnail image/text
-              media.addEventListener('ended', function () {
-                try { URL.revokeObjectURL(src); } catch (e) {}
+              media.addEventListener("ended", function () {
+                try {
+                  URL.revokeObjectURL(src);
+                } catch (e) {}
                 renderUploads();
               });
             });
-            var pauseBtn = document.createElement('button');
-            pauseBtn.className = 'upload-button';
-            pauseBtn.title = 'Pause';
-            pauseBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" fill="currentColor"/></svg>';
-            pauseBtn.addEventListener('click', function () {
-              var media = thumb.querySelector('video, audio');
-              if (media && !media.paused) try { media.pause(); } catch (e) {}
+            var pauseBtn = document.createElement("button");
+            pauseBtn.className = "upload-button";
+            pauseBtn.title = "Pause";
+            pauseBtn.innerHTML =
+              '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" fill="currentColor"/></svg>';
+            pauseBtn.addEventListener("click", function () {
+              var media = thumb.querySelector("video, audio");
+              if (media && !media.paused)
+                try {
+                  media.pause();
+                } catch (e) {}
             });
-            var stopBtn = document.createElement('button');
-            stopBtn.className = 'upload-button';
-            stopBtn.title = 'Stop';
-            stopBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 6h12v12H6z" fill="currentColor"/></svg>';
-            stopBtn.addEventListener('click', function () {
-              var media = thumb.querySelector('video, audio');
+            var stopBtn = document.createElement("button");
+            stopBtn.className = "upload-button";
+            stopBtn.title = "Stop";
+            stopBtn.innerHTML =
+              '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 6h12v12H6z" fill="currentColor"/></svg>';
+            stopBtn.addEventListener("click", function () {
+              var media = thumb.querySelector("video, audio");
               if (media) {
-                try { media.pause(); media.currentTime = 0; } catch (e) {}
+                try {
+                  media.pause();
+                  media.currentTime = 0;
+                } catch (e) {}
                 // restore thumbnail view
                 renderUploads();
               }
@@ -743,11 +794,12 @@ document.addEventListener("DOMContentLoaded", function () {
             actions.appendChild(stopBtn);
           } else {
             // for images/text/pdf provide a View button that opens modal
-            var viewBtn = document.createElement('button');
-            viewBtn.className = 'upload-button';
-            viewBtn.title = 'View';
-            viewBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 5c-7 0-11 6-11 7s4 7 11 7 11-6 11-7-4-7-11-7zm0 11a4 4 0 110-8 4 4 0 010 8z" fill="currentColor"/></svg>';
-            viewBtn.addEventListener('click', function () {
+            var viewBtn = document.createElement("button");
+            viewBtn.className = "upload-button";
+            viewBtn.title = "View";
+            viewBtn.innerHTML =
+              '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 5c-7 0-11 6-11 7s4 7 11 7 11-6 11-7-4-7-11-7zm0 11a4 4 0 110-8 4 4 0 010 8z" fill="currentColor"/></svg>';
+            viewBtn.addEventListener("click", function () {
               openCreationModal(it);
             });
             actions.appendChild(viewBtn);
@@ -759,13 +811,18 @@ document.addEventListener("DOMContentLoaded", function () {
         // Delete control (if uploader and within deletable window)
         try {
           var now = Date.now();
-          if (it.uploaderId && it.uploaderId === clientId && it.deletableUntil && now < it.deletableUntil) {
-            var delbtn = document.createElement('button');
-            delbtn.textContent = 'Delete';
-            delbtn.className = 'thumb-delete';
-            delbtn.addEventListener('click', function () {
-              if (!confirm('Delete this upload?')) return;
-              var tx = db.transaction([uploadsStore], 'readwrite');
+          if (
+            it.uploaderId &&
+            it.uploaderId === clientId &&
+            it.deletableUntil &&
+            now < it.deletableUntil
+          ) {
+            var delbtn = document.createElement("button");
+            delbtn.textContent = "Delete";
+            delbtn.className = "thumb-delete";
+            delbtn.addEventListener("click", function () {
+              if (!confirm("Delete this upload?")) return;
+              var tx = db.transaction([uploadsStore], "readwrite");
               var store = tx.objectStore(uploadsStore);
               var r = store.delete(it.id);
               r.onsuccess = function () {
@@ -775,10 +832,10 @@ document.addEventListener("DOMContentLoaded", function () {
                 } catch (e) {}
                 renderUploads();
                 renderHomeFeatured();
-                showToast('Upload deleted');
+                showToast("Upload deleted");
               };
               r.onerror = function () {
-                showToast('Failed to delete upload');
+                showToast("Failed to delete upload");
               };
             });
             actions.appendChild(delbtn);
@@ -1023,7 +1080,12 @@ document.addEventListener("DOMContentLoaded", function () {
         if (!v) return console.log("No featured video element found");
         console.log("featured video src:", v.src);
         console.log("readyState:", v.readyState);
-        console.log("videoWidth x videoHeight:", v.videoWidth, "x", v.videoHeight);
+        console.log(
+          "videoWidth x videoHeight:",
+          v.videoWidth,
+          "x",
+          v.videoHeight
+        );
         console.log("paused:", v.paused, "ended:", v.ended);
       } catch (e) {
         console.error(e);
@@ -1036,35 +1098,50 @@ document.addEventListener("DOMContentLoaded", function () {
         var videoEl = document.getElementById("featured-video");
         if (!videoEl) return;
         // try to re-set the src from the current src to force reload
-        var cur = videoEl.src || videoEl.getAttribute('src') || "";
-        if (!cur) return console.log('No featured video source to reload');
+        var cur = videoEl.src || videoEl.getAttribute("src") || "";
+        if (!cur) return console.log("No featured video source to reload");
         // force reload
-        try { videoEl.pause(); } catch (e) {}
+        try {
+          videoEl.pause();
+        } catch (e) {}
         // reset src and call load
         var original = cur;
-        videoEl.removeAttribute('src');
-        try { videoEl.load(); } catch (e) {}
+        videoEl.removeAttribute("src");
+        try {
+          videoEl.load();
+        } catch (e) {}
         // small timeout then reassign and load/play
         setTimeout(function () {
           videoEl.src = original;
-          try { videoEl.load(); } catch (e) {}
+          try {
+            videoEl.load();
+          } catch (e) {}
           // attempt play; catch promise rejection silently
           var p = videoEl.play();
           if (p && p.then) p.catch(function () {});
           // after a short interval check if video frames decoded
           setTimeout(function () {
             if (!videoEl.videoWidth || !videoEl.videoHeight) {
-              console.warn('Featured video has no decoded frames; showing poster fallback');
+              console.warn(
+                "Featured video has no decoded frames; showing poster fallback"
+              );
               // set a simple poster fallback (a purple placeholder) to avoid black block
               try {
-                videoEl.poster = '';
+                videoEl.poster = "";
                 // create a lightweight data URL SVG poster
-                var svg = '<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720"><rect width="100%" height="100%" fill="%237c3aed"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="48" fill="#fff">No video preview</text></svg>';
-                var data = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
+                var svg =
+                  '<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720"><rect width="100%" height="100%" fill="%237c3aed"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="48" fill="#fff">No video preview</text></svg>';
+                var data =
+                  "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svg);
                 videoEl.poster = data;
               } catch (e) {}
             } else {
-              console.log('Featured video frames decoded', videoEl.videoWidth, 'x', videoEl.videoHeight);
+              console.log(
+                "Featured video frames decoded",
+                videoEl.videoWidth,
+                "x",
+                videoEl.videoHeight
+              );
             }
           }, 700);
         }, 120);
@@ -1073,29 +1150,65 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     }
 
-    var reloadBtn = document.getElementById('featured-reload');
-    if (reloadBtn) reloadBtn.addEventListener('click', reloadFeaturedVideo);
+    var reloadBtn = document.getElementById("featured-reload");
+    if (reloadBtn) reloadBtn.addEventListener("click", reloadFeaturedVideo);
 
     // Diagnostics: list uploads and basic blob info in the console for debugging
     window.peekseeListUploads = function () {
       openDB().then(function () {
         getAllFromStore(uploadsStore).then(function (items) {
-          if (!items || !items.length) return console.log('No uploads');
-          console.table(items.map(function (it) { return { id: it.id, name: it.name, type: it.type, size: it.blob && it.blob.size ? it.blob.size : (it.url? 'remote':'n/a') }; }));
+          if (!items || !items.length) return console.log("No uploads");
+          console.table(
+            items.map(function (it) {
+              return {
+                id: it.id,
+                name: it.name,
+                type: it.type,
+                size:
+                  it.blob && it.blob.size
+                    ? it.blob.size
+                    : it.url
+                    ? "remote"
+                    : "n/a",
+              };
+            })
+          );
           // for blobs, print first bytes as hex (first 64 bytes) for inspection
           items.forEach(function (it) {
             if (it.blob) {
               var fr = new FileReader();
               fr.onload = function (e) {
                 var ab = e.target.result;
-                var bytes = new Uint8Array(ab.slice(0,64));
-                var hex = Array.from(bytes).map(function(b){return ('00'+b.toString(16)).slice(-2)}).join(' ');
-                console.log('Upload', it.id, it.name, it.type, it.blob.size, 'first64hex:', hex);
+                var bytes = new Uint8Array(ab.slice(0, 64));
+                var hex = Array.from(bytes)
+                  .map(function (b) {
+                    return ("00" + b.toString(16)).slice(-2);
+                  })
+                  .join(" ");
+                console.log(
+                  "Upload",
+                  it.id,
+                  it.name,
+                  it.type,
+                  it.blob.size,
+                  "first64hex:",
+                  hex
+                );
               };
-              fr.onerror = function () { console.warn('Failed to read blob for', it.id); };
-              fr.readAsArrayBuffer(it.blob.slice(0,64));
+              fr.onerror = function () {
+                console.warn("Failed to read blob for", it.id);
+              };
+              fr.readAsArrayBuffer(it.blob.slice(0, 64));
             } else {
-              console.log('Upload', it.id, it.name, 'remote url:', it.url, 'type:', it.type);
+              console.log(
+                "Upload",
+                it.id,
+                it.name,
+                "remote url:",
+                it.url,
+                "type:",
+                it.type
+              );
             }
           });
         });
@@ -1104,21 +1217,31 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Self-test helper: attempt to store a tiny text blob and verify it's persisted
     window.peekseeSelfTestUploads = function () {
-      var name = 'selftest-' + Date.now() + '.txt';
-      var blob = new Blob(["peeksee-selftest"], { type: 'text/plain' });
-      console.log('peeksee: running self-test addFile for', name);
-      addFile(name, 'text/plain', blob, null, clientId, Date.now() + 60000)
+      var name = "selftest-" + Date.now() + ".txt";
+      var blob = new Blob(["peeksee-selftest"], { type: "text/plain" });
+      console.log("peeksee: running self-test addFile for", name);
+      addFile(name, "text/plain", blob, null, clientId, Date.now() + 60000)
         .then(function (id) {
-          console.log('peeksee: addFile succeeded, id=', id);
+          console.log("peeksee: addFile succeeded, id=", id);
           // verify by reading all files and finding this name
-          listFiles().then(function (items) {
-            var found = (items || []).find(function (it) { return it.id === id || it.name === name; });
-            if (found) console.log('peeksee: self-test verified stored record', found);
-            else console.error('peeksee: self-test could not find stored record');
-          }).catch(function (e) { console.error('peeksee: listFiles failed', e); });
+          listFiles()
+            .then(function (items) {
+              var found = (items || []).find(function (it) {
+                return it.id === id || it.name === name;
+              });
+              if (found)
+                console.log("peeksee: self-test verified stored record", found);
+              else
+                console.error(
+                  "peeksee: self-test could not find stored record"
+                );
+            })
+            .catch(function (e) {
+              console.error("peeksee: listFiles failed", e);
+            });
         })
         .catch(function (err) {
-          console.error('peeksee: self-test addFile failed', err);
+          console.error("peeksee: self-test addFile failed", err);
         });
     };
 
@@ -1126,7 +1249,7 @@ document.addEventListener("DOMContentLoaded", function () {
     window.peekseeSkipPerUploadFee = function (enable) {
       if (enable) localStorage.setItem(SKIP_PER_UPLOAD_FEE_KEY, "1");
       else localStorage.removeItem(SKIP_PER_UPLOAD_FEE_KEY);
-      console.log('peeksee: skip per-upload fee set to', enable ? 'ON' : 'OFF');
+      console.log("peeksee: skip per-upload fee set to", enable ? "ON" : "OFF");
     };
     window.peekseeIsSkippingPerUploadFee = function () {
       return localStorage.getItem(SKIP_PER_UPLOAD_FEE_KEY) === "1";
@@ -1134,18 +1257,22 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Per-upload fee enabled getter/setter
     function isPerUploadFeeEnabled() {
-      return localStorage.getItem(PER_UPLOAD_FEE_ENABLED_KEY) !== '0';
+      return localStorage.getItem(PER_UPLOAD_FEE_ENABLED_KEY) !== "0";
     }
     function setPerUploadFeeEnabled(enabled) {
-      localStorage.setItem(PER_UPLOAD_FEE_ENABLED_KEY, enabled ? '1' : '0');
+      localStorage.setItem(PER_UPLOAD_FEE_ENABLED_KEY, enabled ? "1" : "0");
     }
     // Admin helpers (very lightweight client-only auth using a stored hash)
     function sha256(text) {
       // returns a Promise<string> hex
       var enc = new TextEncoder();
       var data = enc.encode(text);
-      return crypto.subtle.digest('SHA-256', data).then(function (hash) {
-        var hex = Array.from(new Uint8Array(hash)).map(function (b) { return ('00' + b.toString(16)).slice(-2); }).join('');
+      return crypto.subtle.digest("SHA-256", data).then(function (hash) {
+        var hex = Array.from(new Uint8Array(hash))
+          .map(function (b) {
+            return ("00" + b.toString(16)).slice(-2);
+          })
+          .join("");
         return hex;
       });
     }
@@ -1273,14 +1400,20 @@ document.addEventListener("DOMContentLoaded", function () {
         v.playsInline = true;
         body.appendChild(v);
         // attempt to play and silence promise rejections
-        try { var p = v.play(); if (p && p.then) p.catch(function(){}); } catch(e){}
+        try {
+          var p = v.play();
+          if (p && p.then) p.catch(function () {});
+        } catch (e) {}
       } else if (src && it.type && it.type.indexOf("audio/") === 0) {
         var a = document.createElement("audio");
         a.src = src;
         a.controls = true;
         a.autoplay = true;
         body.appendChild(a);
-        try { var p2 = a.play(); if (p2 && p2.then) p2.catch(function(){}); } catch(e){}
+        try {
+          var p2 = a.play();
+          if (p2 && p2.then) p2.catch(function () {});
+        } catch (e) {}
       } else if (src) {
         // attempt to guess audio for common extensions if mime missing
         if (it.name && it.name.match(/\.mp3$|\.wav$|\.ogg$/i)) {
@@ -1315,19 +1448,24 @@ document.addEventListener("DOMContentLoaded", function () {
         var saved = localStorage.getItem(BG_KEY);
         if (saved) applyBackground(saved);
       }
-        var BG_ATTR = {
-          'https://images.unsplash.com/photo-1517604931442-7f8a3cb81005?q=80&w=1600&auto=format&fit=crop&ixlib=rb-4.0.3&s=1': 'Photo: Stage by Unsplash user',
-          'https://images.unsplash.com/photo-1508973378-3a9d0c6a6a23?q=80&w=1600&auto=format&fit=crop&ixlib=rb-4.0.3&s=2': 'Photo: Theater stage by Unsplash user',
-          'https://images.unsplash.com/photo-1526403224746-4c5b55a6b892?q=80&w=1600&auto=format&fit=crop&ixlib=rb-4.0.3&s=3': 'Photo: Concert stage by Unsplash user'
-        };
-        function applyBackground(url) {
-          if (!url) return;
-          document.body.style.backgroundImage = 'url("' + url + '")';
-          var att = document.querySelector('.bg-attribution');
-          if (att) att.textContent = BG_ATTR[url] || 'Background image: Unsplash (temporary)';
-          // ensure content overlay readability
-          document.body.style.backgroundSize = 'cover';
-        }
+      var BG_ATTR = {
+        "https://images.unsplash.com/photo-1517604931442-7f8a3cb81005?q=80&w=1600&auto=format&fit=crop&ixlib=rb-4.0.3&s=1":
+          "Photo: Stage by Unsplash user",
+        "https://images.unsplash.com/photo-1508973378-3a9d0c6a6a23?q=80&w=1600&auto=format&fit=crop&ixlib=rb-4.0.3&s=2":
+          "Photo: Theater stage by Unsplash user",
+        "https://images.unsplash.com/photo-1526403224746-4c5b55a6b892?q=80&w=1600&auto=format&fit=crop&ixlib=rb-4.0.3&s=3":
+          "Photo: Concert stage by Unsplash user",
+      };
+      function applyBackground(url) {
+        if (!url) return;
+        document.body.style.backgroundImage = 'url("' + url + '")';
+        var att = document.querySelector(".bg-attribution");
+        if (att)
+          att.textContent =
+            BG_ATTR[url] || "Background image: Unsplash (temporary)";
+        // ensure content overlay readability
+        document.body.style.backgroundSize = "cover";
+      }
       modal.setAttribute("aria-hidden", "false");
       // focus close button for accessibility
       var closeBtn = document.getElementById("creation-modal-close");
@@ -1381,11 +1519,25 @@ document.addEventListener("DOMContentLoaded", function () {
         if (body) body.innerHTML = "";
         // stop any playing media in modal and revoke any object URLs
         try {
-          var m = modal && modal.querySelector('video, audio');
-          if (m) { try { m.pause(); m.currentTime = 0; } catch (e) {} }
-          var imgs = modal && modal.querySelectorAll('img');
-          imgs && imgs.forEach(function(im){ if (im && im.src && im.src.indexOf('blob:')===0) try{ URL.revokeObjectURL(im.src); }catch(e){} });
-          if (m && m.src && m.src.indexOf('blob:')===0) try{ URL.revokeObjectURL(m.src); } catch(e) {}
+          var m = modal && modal.querySelector("video, audio");
+          if (m) {
+            try {
+              m.pause();
+              m.currentTime = 0;
+            } catch (e) {}
+          }
+          var imgs = modal && modal.querySelectorAll("img");
+          imgs &&
+            imgs.forEach(function (im) {
+              if (im && im.src && im.src.indexOf("blob:") === 0)
+                try {
+                  URL.revokeObjectURL(im.src);
+                } catch (e) {}
+            });
+          if (m && m.src && m.src.indexOf("blob:") === 0)
+            try {
+              URL.revokeObjectURL(m.src);
+            } catch (e) {}
         } catch (e) {}
         // clear modal engagement buttons
         try {
@@ -1401,19 +1553,23 @@ document.addEventListener("DOMContentLoaded", function () {
       } catch (e) {}
     }
 
-    if (modalClose) modalClose.addEventListener('click', closeCreationModal);
+    if (modalClose) modalClose.addEventListener("click", closeCreationModal);
 
     // wire inline modal close button(s)
-    var modalCloseInlineBtns = document.querySelectorAll('#modal-close-inline');
-    modalCloseInlineBtns.forEach(function(b){ b.addEventListener('click', closeCreationModal); });
+    var modalCloseInlineBtns = document.querySelectorAll("#modal-close-inline");
+    modalCloseInlineBtns.forEach(function (b) {
+      b.addEventListener("click", closeCreationModal);
+    });
 
     // helper to stop any playing media on the page (so only one plays at a time)
     function stopAllMedia() {
       try {
         // pause any video/audio elements in the document
-        var medias = document.querySelectorAll('video, audio');
+        var medias = document.querySelectorAll("video, audio");
         medias.forEach(function (m) {
-          try { if (!m.paused) m.pause(); } catch (e) {}
+          try {
+            if (!m.paused) m.pause();
+          } catch (e) {}
         });
       } catch (e) {}
     }
@@ -1439,20 +1595,29 @@ document.addEventListener("DOMContentLoaded", function () {
       }
       // modal playback keyboard shortcuts
       try {
-        var modal = document.getElementById('creation-modal');
-        if (modal && modal.getAttribute('aria-hidden') === 'false') {
-          var media = modal.querySelector('video, audio');
-          if (e.key === ' ' || e.key === 'k') {
+        var modal = document.getElementById("creation-modal");
+        if (modal && modal.getAttribute("aria-hidden") === "false") {
+          var media = modal.querySelector("video, audio");
+          if (e.key === " " || e.key === "k") {
             e.preventDefault();
             if (media) {
               if (media.paused) {
-                try { media.play(); } catch (er) {}
+                try {
+                  media.play();
+                } catch (er) {}
               } else {
-                try { media.pause(); } catch (er) {}
+                try {
+                  media.pause();
+                } catch (er) {}
               }
             }
-          } else if (e.key === 's') {
-            if (media) { try { media.pause(); media.currentTime = 0; } catch (er) {} }
+          } else if (e.key === "s") {
+            if (media) {
+              try {
+                media.pause();
+                media.currentTime = 0;
+              } catch (er) {}
+            }
           }
         }
       } catch (er) {}
@@ -1615,10 +1780,16 @@ document.addEventListener("DOMContentLoaded", function () {
               if (commentBtn) commentBtn.dataset.id = rec.id;
               // update modal numeric badges if present
               try {
-                var likeCount = document.querySelector('.modal-controls .count-like');
-                var commentCount = document.querySelector('.modal-controls .count-comment');
+                var likeCount = document.querySelector(
+                  ".modal-controls .count-like"
+                );
+                var commentCount = document.querySelector(
+                  ".modal-controls .count-comment"
+                );
                 if (likeCount) likeCount.textContent = rec.likes || 0;
-                if (commentCount) commentCount.textContent = (rec.comments && rec.comments.length) || 0;
+                if (commentCount)
+                  commentCount.textContent =
+                    (rec.comments && rec.comments.length) || 0;
               } catch (e) {}
             } catch (e) {}
             showToast("Thanks for the feedback");
@@ -1666,41 +1837,58 @@ document.addEventListener("DOMContentLoaded", function () {
           // View / Play controls
           try {
             var src = it.blob ? URL.createObjectURL(it.blob) : it.url || null;
-            if (it.type && (it.type.indexOf('video/') === 0 || it.type.indexOf('audio/') === 0)) {
-              var play = document.createElement('button');
-              play.className = 'upload-button';
-              play.title = 'Play';
-              play.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 3v18l15-9L5 3z" fill="currentColor"/></svg>';
-              play.addEventListener('click', function () {
+            if (
+              it.type &&
+              (it.type.indexOf("video/") === 0 ||
+                it.type.indexOf("audio/") === 0)
+            ) {
+              var play = document.createElement("button");
+              play.className = "upload-button";
+              play.title = "Play";
+              play.innerHTML =
+                '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 3v18l15-9L5 3z" fill="currentColor"/></svg>';
+              play.addEventListener("click", function () {
                 // open modal and play
                 openCreationModal(it);
               });
-              var pause = document.createElement('button');
-              pause.className = 'upload-button';
-              pause.title = 'Pause';
-              pause.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" fill="currentColor"/></svg>';
-              pause.addEventListener('click', function () {
-                var modal = document.getElementById('creation-modal');
-                var m = modal && modal.querySelector('video, audio');
-                if (m && !m.paused) try { m.pause(); } catch (e) {}
+              var pause = document.createElement("button");
+              pause.className = "upload-button";
+              pause.title = "Pause";
+              pause.innerHTML =
+                '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" fill="currentColor"/></svg>';
+              pause.addEventListener("click", function () {
+                var modal = document.getElementById("creation-modal");
+                var m = modal && modal.querySelector("video, audio");
+                if (m && !m.paused)
+                  try {
+                    m.pause();
+                  } catch (e) {}
               });
-              var stop = document.createElement('button');
-              stop.className = 'upload-button';
-              stop.title = 'Stop';
-              stop.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 6h12v12H6z" fill="currentColor"/></svg>';
-              stop.addEventListener('click', function () {
-                var modal = document.getElementById('creation-modal');
-                var m = modal && modal.querySelector('video, audio');
-                if (m) { try { m.pause(); m.currentTime = 0; } catch (e) {} }
+              var stop = document.createElement("button");
+              stop.className = "upload-button";
+              stop.title = "Stop";
+              stop.innerHTML =
+                '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 6h12v12H6z" fill="currentColor"/></svg>';
+              stop.addEventListener("click", function () {
+                var modal = document.getElementById("creation-modal");
+                var m = modal && modal.querySelector("video, audio");
+                if (m) {
+                  try {
+                    m.pause();
+                    m.currentTime = 0;
+                  } catch (e) {}
+                }
               });
               actions.appendChild(play);
               actions.appendChild(pause);
               actions.appendChild(stop);
             } else {
-              var view = document.createElement('button');
-              view.textContent = 'View';
-              view.className = 'upload-button';
-              view.addEventListener('click', function () { openCreationModal(it); });
+              var view = document.createElement("button");
+              view.textContent = "View";
+              view.className = "upload-button";
+              view.addEventListener("click", function () {
+                openCreationModal(it);
+              });
               actions.appendChild(view);
             }
           } catch (e) {
@@ -1733,22 +1921,22 @@ document.addEventListener("DOMContentLoaded", function () {
           actions.appendChild(del);
 
           // Feature toggle (admin-only): mark upload as featured
-          var featLbl = document.createElement('label');
-          featLbl.style.marginLeft = '8px';
-          var featCb = document.createElement('input');
-          featCb.type = 'checkbox';
+          var featLbl = document.createElement("label");
+          featLbl.style.marginLeft = "8px";
+          var featCb = document.createElement("input");
+          featCb.type = "checkbox";
           featCb.checked = !!it.featured;
-          featCb.addEventListener('change', function () {
+          featCb.addEventListener("change", function () {
             it.featured = featCb.checked;
-            var tx2 = db.transaction([uploadsStore], 'readwrite');
+            var tx2 = db.transaction([uploadsStore], "readwrite");
             tx2.objectStore(uploadsStore).put(it).onsuccess = function () {
               renderAdminUploads();
               renderHomeFeatured();
-              showToast('Featured flag updated');
+              showToast("Featured flag updated");
             };
           });
           featLbl.appendChild(featCb);
-          featLbl.appendChild(document.createTextNode(' Featured'));
+          featLbl.appendChild(document.createTextNode(" Featured"));
           actions.appendChild(featLbl);
           el.appendChild(actions);
           container.appendChild(el);
@@ -1821,27 +2009,27 @@ document.addEventListener("DOMContentLoaded", function () {
     renderAdminContacts();
 
     // Admin page auth and site controls wiring
-    var adminAuthEl = document.getElementById('admin-auth');
-    var adminApp = document.getElementById('admin-app');
+    var adminAuthEl = document.getElementById("admin-auth");
+    var adminApp = document.getElementById("admin-app");
     if (adminAuthEl) {
-      var passInput = document.getElementById('admin-pass');
-      var setBtn = document.getElementById('admin-set-pass');
-      var loginBtn = document.getElementById('admin-login');
-      var msg = document.getElementById('admin-auth-msg');
+      var passInput = document.getElementById("admin-pass");
+      var setBtn = document.getElementById("admin-set-pass");
+      var loginBtn = document.getElementById("admin-login");
+      var msg = document.getElementById("admin-auth-msg");
       // Admin session persistence keys and inactivity timeout (15 minutes)
-      var ADMIN_SESSION_KEY = 'peeksee_admin_logged_in';
-      var ADMIN_LAST_ACTIVE_KEY = 'peeksee_admin_last_active';
+      var ADMIN_SESSION_KEY = "peeksee_admin_logged_in";
+      var ADMIN_LAST_ACTIVE_KEY = "peeksee_admin_last_active";
       var ADMIN_INACTIVITY_MS = 15 * 60 * 1000; // 15 minutes
       var adminInactivityTimer = null;
 
       function setAdminSession(persist) {
         try {
-          localStorage.setItem(ADMIN_SESSION_KEY, '1');
+          localStorage.setItem(ADMIN_SESSION_KEY, "1");
           localStorage.setItem(ADMIN_LAST_ACTIVE_KEY, String(Date.now()));
         } catch (e) {}
         startAdminInactivityWatcher();
-        if (adminAuthEl) adminAuthEl.style.display = 'none';
-        if (adminApp) adminApp.style.display = '';
+        if (adminAuthEl) adminAuthEl.style.display = "none";
+        if (adminApp) adminApp.style.display = "";
       }
 
       function clearAdminSession() {
@@ -1850,15 +2038,15 @@ document.addEventListener("DOMContentLoaded", function () {
           localStorage.removeItem(ADMIN_LAST_ACTIVE_KEY);
         } catch (e) {}
         stopAdminInactivityWatcher();
-        if (adminAuthEl) adminAuthEl.style.display = '';
-        if (adminApp) adminApp.style.display = 'none';
+        if (adminAuthEl) adminAuthEl.style.display = "";
+        if (adminApp) adminApp.style.display = "none";
       }
 
       function isAdminSessionActive() {
         try {
           var v = localStorage.getItem(ADMIN_SESSION_KEY);
           if (!v) return false;
-          var last = Number(localStorage.getItem(ADMIN_LAST_ACTIVE_KEY) || '0');
+          var last = Number(localStorage.getItem(ADMIN_LAST_ACTIVE_KEY) || "0");
           if (!last) return false;
           return Date.now() - last < ADMIN_INACTIVITY_MS;
         } catch (e) {
@@ -1867,100 +2055,139 @@ document.addEventListener("DOMContentLoaded", function () {
       }
 
       function refreshAdminLastActive() {
-        try { localStorage.setItem(ADMIN_LAST_ACTIVE_KEY, String(Date.now())); } catch (e) {}
+        try {
+          localStorage.setItem(ADMIN_LAST_ACTIVE_KEY, String(Date.now()));
+        } catch (e) {}
       }
 
       function startAdminInactivityWatcher() {
         stopAdminInactivityWatcher();
         adminInactivityTimer = setInterval(function () {
           try {
-            var last = Number(localStorage.getItem(ADMIN_LAST_ACTIVE_KEY) || '0');
+            var last = Number(
+              localStorage.getItem(ADMIN_LAST_ACTIVE_KEY) || "0"
+            );
             if (!last) return;
             if (Date.now() - last >= ADMIN_INACTIVITY_MS) {
               // session expired
               clearAdminSession();
-              showToast('Admin session expired due to inactivity');
+              showToast("Admin session expired due to inactivity");
             }
           } catch (e) {}
         }, 1000 * 30); // check every 30s
       }
 
-      function stopAdminInactivityWatcher() { if (adminInactivityTimer) { clearInterval(adminInactivityTimer); adminInactivityTimer = null; } }
+      function stopAdminInactivityWatcher() {
+        if (adminInactivityTimer) {
+          clearInterval(adminInactivityTimer);
+          adminInactivityTimer = null;
+        }
+      }
 
       // Wire global activity listeners to refresh last-active timestamp while admin is logged in
-      ['click','mousemove','keydown','touchstart'].forEach(function(evt){
-        document.addEventListener(evt, function(){ if (localStorage.getItem(ADMIN_SESSION_KEY)) refreshAdminLastActive(); });
+      ["click", "mousemove", "keydown", "touchstart"].forEach(function (evt) {
+        document.addEventListener(evt, function () {
+          if (localStorage.getItem(ADMIN_SESSION_KEY)) refreshAdminLastActive();
+        });
       });
-      setBtn && setBtn.addEventListener('click', function () {
-        var pass = passInput && passInput.value || '';
-        if (!pass) { msg.textContent = 'Enter a passphrase first'; return; }
-        adminSetPassphrase(pass).then(function () { msg.textContent = 'Passphrase set. You may now login.'; passInput.value = ''; });
-      });
+      setBtn &&
+        setBtn.addEventListener("click", function () {
+          var pass = (passInput && passInput.value) || "";
+          if (!pass) {
+            msg.textContent = "Enter a passphrase first";
+            return;
+          }
+          adminSetPassphrase(pass).then(function () {
+            msg.textContent = "Passphrase set. You may now login.";
+            passInput.value = "";
+          });
+        });
 
       // Try server-side admin login first if the server expects a token: user can paste the server ADMIN_TOKEN here
-      loginBtn && loginBtn.addEventListener('click', function () {
-        var pass = passInput && passInput.value || '';
-        if (!pass) { msg.textContent = 'Enter a passphrase or server admin token to login'; return; }
-        // Attempt server login
-        fetch('/admin-login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ token: pass }) })
-          .then(function (r) {
-            if (r.ok) return r.json().then(function () { return { server: true }; });
-            // if server rejected, try local passphrase
-            return adminCheckPassphrase(pass).then(function (ok) {
-              return { server: false, ok: ok };
-            });
+      loginBtn &&
+        loginBtn.addEventListener("click", function () {
+          var pass = (passInput && passInput.value) || "";
+          if (!pass) {
+            msg.textContent =
+              "Enter a passphrase or server admin token to login";
+            return;
+          }
+          // Attempt server login
+          fetch("/admin-login", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ token: pass }),
           })
-          .then(function (resObj) {
-            if (resObj && resObj.server) {
-              // server login successful; hide auth overlay
-              setAdminSession(true);
-              msg.textContent = '';
-              showToast('Logged in with server admin token');
-            } else if (resObj && resObj.ok) {
-              setAdminSession(true);
-              msg.textContent = '';
-              showToast('Logged in with local passphrase');
-            } else {
-              msg.textContent = 'Invalid passphrase or server token';
-            }
-          })
-          .catch(function () {
-            // on network/server error, fall back to local passphrase check
-            adminCheckPassphrase(pass).then(function (ok) {
-              if (ok) {
+            .then(function (r) {
+              if (r.ok)
+                return r.json().then(function () {
+                  return { server: true };
+                });
+              // if server rejected, try local passphrase
+              return adminCheckPassphrase(pass).then(function (ok) {
+                return { server: false, ok: ok };
+              });
+            })
+            .then(function (resObj) {
+              if (resObj && resObj.server) {
+                // server login successful; hide auth overlay
                 setAdminSession(true);
-                msg.textContent = '';
-                showToast('Logged in with local passphrase (server unreachable)');
+                msg.textContent = "";
+                showToast("Logged in with server admin token");
+              } else if (resObj && resObj.ok) {
+                setAdminSession(true);
+                msg.textContent = "";
+                showToast("Logged in with local passphrase");
               } else {
-                msg.textContent = 'Invalid passphrase and server login failed';
+                msg.textContent = "Invalid passphrase or server token";
               }
+            })
+            .catch(function () {
+              // on network/server error, fall back to local passphrase check
+              adminCheckPassphrase(pass).then(function (ok) {
+                if (ok) {
+                  setAdminSession(true);
+                  msg.textContent = "";
+                  showToast(
+                    "Logged in with local passphrase (server unreachable)"
+                  );
+                } else {
+                  msg.textContent =
+                    "Invalid passphrase and server login failed";
+                }
+              });
             });
-          });
-      });
+        });
       // update per-upload fee status indicator
-      var feeBtn = document.getElementById('toggle-per-upload-fee');
-      var feeStatus = document.getElementById('per-upload-fee-status');
+      var feeBtn = document.getElementById("toggle-per-upload-fee");
+      var feeStatus = document.getElementById("per-upload-fee-status");
       function refreshFeeStatus() {
-        if (feeStatus) feeStatus.textContent = isPerUploadFeeEnabled() ? 'Enabled' : 'Disabled';
+        if (feeStatus)
+          feeStatus.textContent = isPerUploadFeeEnabled()
+            ? "Enabled"
+            : "Disabled";
       }
       refreshFeeStatus();
-      if (feeBtn) feeBtn.addEventListener('click', function () {
-        var next = !isPerUploadFeeEnabled();
-        setPerUploadFeeEnabled(next);
-        refreshFeeStatus();
-        showToast('Per-upload fee ' + (next ? 'enabled' : 'disabled'));
-      });
+      if (feeBtn)
+        feeBtn.addEventListener("click", function () {
+          var next = !isPerUploadFeeEnabled();
+          setPerUploadFeeEnabled(next);
+          refreshFeeStatus();
+          showToast("Per-upload fee " + (next ? "enabled" : "disabled"));
+        });
       // admin logout button (server-side session logout)
-      var logoutBtn = document.getElementById('admin-logout-btn');
+      var logoutBtn = document.getElementById("admin-logout-btn");
       if (logoutBtn) {
-        logoutBtn.addEventListener('click', function () {
-          fetch('/admin-logout', { method: 'POST' }).then(function () {
-            clearAdminSession();
-            showToast('Logged out');
-          }).catch(function () {
-            clearAdminSession();
-            showToast('Logged out (local)');
-          });
+        logoutBtn.addEventListener("click", function () {
+          fetch("/admin-logout", { method: "POST" })
+            .then(function () {
+              clearAdminSession();
+              showToast("Logged out");
+            })
+            .catch(function () {
+              clearAdminSession();
+              showToast("Logged out (local)");
+            });
         });
       }
     }
@@ -1969,10 +2196,10 @@ document.addEventListener("DOMContentLoaded", function () {
     try {
       if (isAdminSessionActive()) {
         // show admin app
-        var adminAuthElLoad = document.getElementById('admin-auth');
-        var adminAppLoad = document.getElementById('admin-app');
-        if (adminAuthElLoad) adminAuthElLoad.style.display = 'none';
-        if (adminAppLoad) adminAppLoad.style.display = '';
+        var adminAuthElLoad = document.getElementById("admin-auth");
+        var adminAppLoad = document.getElementById("admin-app");
+        if (adminAuthElLoad) adminAuthElLoad.style.display = "none";
+        if (adminAppLoad) adminAppLoad.style.display = "";
         startAdminInactivityWatcher();
       }
     } catch (e) {}
@@ -2186,18 +2413,20 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Floating debug button to run self-test and list uploads (development aid)
     try {
-      var dbg = document.createElement('button');
-      dbg.id = 'peeksee-debug-btn';
-      dbg.textContent = 'Run Peeksee Debug';
-      dbg.style.position = 'fixed';
-      dbg.style.right = '12px';
-      dbg.style.bottom = '12px';
+      var dbg = document.createElement("button");
+      dbg.id = "peeksee-debug-btn";
+      dbg.textContent = "Run Peeksee Debug";
+      dbg.style.position = "fixed";
+      dbg.style.right = "12px";
+      dbg.style.bottom = "12px";
       dbg.style.zIndex = 9999;
-      dbg.className = 'upload-button';
-      dbg.addEventListener('click', function () {
-        console.log('peeksee: debug button clicked');
+      dbg.className = "upload-button";
+      dbg.addEventListener("click", function () {
+        console.log("peeksee: debug button clicked");
         if (window.peekseeSelfTestUploads) window.peekseeSelfTestUploads();
-        setTimeout(function () { if (window.peekseeListUploads) window.peekseeListUploads(); }, 800);
+        setTimeout(function () {
+          if (window.peekseeListUploads) window.peekseeListUploads();
+        }, 800);
       });
       document.body.appendChild(dbg);
     } catch (e) {}
@@ -2431,8 +2660,10 @@ document.addEventListener("DOMContentLoaded", function () {
                     );
                   })
                   .catch(function (err) {
-                    console.error('addFile failed for', f.name, err);
-                    showToast('Failed to save ' + f.name + ': ' + (err && err.message));
+                    console.error("addFile failed for", f.name, err);
+                    showToast(
+                      "Failed to save " + f.name + ": " + (err && err.message)
+                    );
                     return Promise.reject(err);
                   });
               });
@@ -2450,7 +2681,7 @@ document.addEventListener("DOMContentLoaded", function () {
             if (err && err.message === "Redirecting to Checkout") {
               // user is being taken to checkout; do nothing further
             } else {
-              console.error('Upload flow failed', err);
+              console.error("Upload flow failed", err);
               showToast("Upload failed: " + (err && err.message));
             }
           });
@@ -2506,8 +2737,10 @@ document.addEventListener("DOMContentLoaded", function () {
                     );
                   })
                   .catch(function (err) {
-                    console.error('addFile failed for', f.name, err);
-                    showToast('Failed to save ' + f.name + ': ' + (err && err.message));
+                    console.error("addFile failed for", f.name, err);
+                    showToast(
+                      "Failed to save " + f.name + ": " + (err && err.message)
+                    );
                     return Promise.reject(err);
                   });
               });

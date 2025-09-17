@@ -13,20 +13,58 @@
       </div>
     </header>
     <!-- Admin auth overlay: simple client-side gate -->
-    <div id="admin-auth" style="position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.7);z-index:20000;">
-      <div style="background:#fff;padding:18px;border-radius:8px;max-width:420px;width:100%;">
+    <div
+      id="admin-auth"
+      style="
+        position: fixed;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(0, 0, 0, 0.7);
+        z-index: 20000;
+      "
+    >
+      <div
+        style="
+          background: #fff;
+          padding: 18px;
+          border-radius: 8px;
+          max-width: 420px;
+          width: 100%;
+        "
+      >
         <h3>Admin Login</h3>
-        <p style="font-size:0.95rem;margin-bottom:8px">Enter your admin passphrase to access this page. If you haven't set one, choose a passphrase and click "Set Passphrase".</p>
-        <input id="admin-pass" type="password" placeholder="Admin passphrase" style="width:100%;padding:8px;margin-bottom:8px;border:1px solid #ddd;border-radius:6px;" />
-        <div style="display:flex;gap:8px;justify-content:flex-end;">
-          <button id="admin-set-pass" class="upload-button">Set Passphrase</button>
+        <p style="font-size: 0.95rem; margin-bottom: 8px">
+          Enter your admin passphrase to access this page. If you haven't set
+          one, choose a passphrase and click "Set Passphrase".
+        </p>
+        <input
+          id="admin-pass"
+          type="password"
+          placeholder="Admin passphrase"
+          style="
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 8px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+          "
+        />
+        <div style="display: flex; gap: 8px; justify-content: flex-end">
+          <button id="admin-set-pass" class="upload-button">
+            Set Passphrase
+          </button>
           <button id="admin-login" class="upload-button">Login</button>
         </div>
-        <div id="admin-auth-msg" style="margin-top:8px;color:#666;font-size:0.9rem"></div>
+        <div
+          id="admin-auth-msg"
+          style="margin-top: 8px; color: #666; font-size: 0.9rem"
+        ></div>
       </div>
     </div>
 
-    <main id="admin-app" style="padding-top: 136px;display:none">
+    <main id="admin-app" style="padding-top: 136px; display: none">
       <h1>Admin — Uploads & Contacts</h1>
 
       <section>
@@ -78,17 +116,26 @@
 
       <section style="margin-top: 20px">
         <h2>Site Controls</h2>
-        <div style="display:flex;gap:8px;align-items:center;">
+        <div style="display: flex; gap: 8px; align-items: center">
           <div>
-            <div style="font-weight:600">Per-upload $1 charge</div>
-            <div style="font-size:0.9rem;color:#666">Enable/disable the per-upload $1 charge for non-subscribers.</div>
-        <section style="margin-top: 12px">
-          <button id="admin-logout-btn" class="upload-button">Logout (Admin)</button>
-        </section>
+            <div style="font-weight: 600">Per-upload $1 charge</div>
+            <div style="font-size: 0.9rem; color: #666">
+              Enable/disable the per-upload $1 charge for non-subscribers.
+            </div>
+            <section style="margin-top: 12px">
+              <button id="admin-logout-btn" class="upload-button">
+                Logout (Admin)
+              </button>
+            </section>
           </div>
-          <div style="margin-left:auto">
-            <button id="toggle-per-upload-fee" class="upload-button">Toggle Per-Upload Fee</button>
-            <div id="per-upload-fee-status" style="margin-top:6px;color:#666;font-size:0.9rem"></div>
+          <div style="margin-left: auto">
+            <button id="toggle-per-upload-fee" class="upload-button">
+              Toggle Per-Upload Fee
+            </button>
+            <div
+              id="per-upload-fee-status"
+              style="margin-top: 6px; color: #666; font-size: 0.9rem"
+            ></div>
           </div>
         </div>
       </section>
@@ -121,17 +168,66 @@
         <button id="creation-modal-close" class="upload-button">Close</button>
         <div id="creation-modal-body"></div>
         <div id="creation-modal-caption" class="muted"></div>
-          <div class="modal-controls" style="margin-top:12px;display:flex;gap:8px;align-items:center;justify-content:center;">
-          <button id="modal-like" class="icon-btn" data-id="0" aria-label="Love"><span class="icon-heart" aria-hidden="true">❤</span></button>
-          <button id="modal-dislike" class="icon-btn" data-id="0" aria-label="Trash"><span class="icon-trash" aria-hidden="true">🗑️</span></button>
-          <div style="display:flex;align-items:center;gap:8px">
-            <input id="modal-comment-input" placeholder="Add a comment" style="padding:6px 8px;border-radius:6px;border:1px solid #ccc;min-width:200px;" />
-            <button id="modal-comment-post" class="upload-button" data-id="0">Post</button>
+        <div
+          class="modal-controls"
+          style="
+            margin-top: 12px;
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            justify-content: center;
+          "
+        >
+          <button
+            id="modal-like"
+            class="icon-btn"
+            data-id="0"
+            aria-label="Love"
+          >
+            <span class="icon-heart" aria-hidden="true">❤</span>
+          </button>
+          <button
+            id="modal-dislike"
+            class="icon-btn"
+            data-id="0"
+            aria-label="Trash"
+          >
+            <span class="icon-trash" aria-hidden="true">🗑️</span>
+          </button>
+          <div style="display: flex; align-items: center; gap: 8px">
+            <input
+              id="modal-comment-input"
+              placeholder="Add a comment"
+              style="
+                padding: 6px 8px;
+                border-radius: 6px;
+                border: 1px solid #ccc;
+                min-width: 200px;
+              "
+            />
+            <button id="modal-comment-post" class="upload-button" data-id="0">
+              Post
+            </button>
             <button id="modal-close-inline" class="upload-button">Close</button>
           </div>
-          <div id="modal-engage-meta" class="muted" style="margin-left:8px"></div>
+          <div
+            id="modal-engage-meta"
+            class="muted"
+            style="margin-left: 8px"
+          ></div>
         </div>
-        <div id="modal-comments" style="margin-top:12px;text-align:left;max-height:180px;overflow:auto;background:rgba(255,255,255,0.02);padding:8px;border-radius:6px;"></div>
+        <div
+          id="modal-comments"
+          style="
+            margin-top: 12px;
+            text-align: left;
+            max-height: 180px;
+            overflow: auto;
+            background: rgba(255, 255, 255, 0.02);
+            padding: 8px;
+            border-radius: 6px;
+          "
+        ></div>
       </div>
     </div>
 
