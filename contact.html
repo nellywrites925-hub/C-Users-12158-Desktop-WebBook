@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Contact - Peeksee</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header class="site-header" role="banner">
+      <div class="header-inner">
+        <div class="logo">PEEKSEE</div>
+      </div>
+    </header>
+
+    <main>
+      <nav class="header-nav" role="navigation" aria-label="Primary navigation">
+        <div class="nav-inner">
+          <div class="nav-scroll">
+            <a class="nav-item" href="index.html">Home</a>
+            <a class="nav-item" href="creations.html">Creations</a>
+            <a class="nav-item" href="creators.html">Creators</a>
+            <a class="nav-item" href="genres.html">Discover</a>
+            <a class="nav-item" href="subscribe.html">Subscribe</a>
+            <a class="nav-item" href="upload.html">Upload</a>
+            <a class="nav-item" href="contact.html">Contact</a>
+          </div>
+        </div>
+      </nav>
+
+      <section id="contact-section">
+        <h2>Contact</h2>
+        <p>
+          If you'd like to contribute, report an issue, or get in touch,
+          complete the form below. I will respond by email within 24–48 hours.
+          If you attach files, please describe the purpose and confirm you have
+          the right to share them.
+        </p>
+
+        <form id="contact-form" class="contact-form">
+          <div class="field">
+            <label for="name">Name</label>
+            <input id="name" name="name" type="text" required />
+          </div>
+
+          <div class="field">
+            <label for="email">Email</label>
+            <input id="email" name="email" type="email" required />
+          </div>
+
+          <div class="field">
+            <label for="subject">Subject</label>
+            <input id="subject" name="subject" type="text" />
+          </div>
+
+          <div class="field field--spaced">
+            <label for="message">Message (required)</label>
+            <textarea
+              id="message"
+              name="message"
+              rows="6"
+              required
+              placeholder="Write your message here. I'll reply within 24–48 hours by email."
+            ></textarea>
+          </div>
+
+          <div class="field field--spaced">
+            <label for="contact-files">Attach files (optional)</label>
+            <input id="contact-files" name="files" type="file" multiple />
+          </div>
+
+          <div class="field field--spaced">
+            <label for="contact-creator">Creator (optional)</label>
+            <div style="display: flex; gap: 8px; align-items: center">
+              <select id="contact-creator">
+                <option value="">(none)</option>
+              </select>
+              <input
+                id="contact-creator-new"
+                type="text"
+                placeholder="Add new creator name"
+              />
+              <button id="contact-creator-add" class="upload-button">
+                Add
+              </button>
+            </div>
+          </div>
+
+          <div class="field field--spaced">
+            <label for="file-purpose"
+              >Purpose / Security note (required if files attached)</label
+            >
+            <textarea
+              id="file-purpose"
+              name="filePurpose"
+              rows="3"
+              placeholder="Explain why you're uploading these files and any security/protection details"
+            ></textarea>
+          </div>
+
+          <div class="field">
+            <label
+              ><input id="consent" name="consent" type="checkbox" /> I confirm I
+              have the right to share these files and they do not contain
+              unauthorized sensitive information.</label
+            >
+          </div>
+
+          <div class="field">
+            <button type="submit">Submit</button>
+            <div id="contact-status" class="muted" aria-live="polite"></div>
+          </div>
+        </form>
+      </section>
+    </main>
+
+    <footer>
+      <p>&copy; 2025 PEEKSEE</p>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>

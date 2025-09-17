@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Creator - Peeksee</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header class="site-header" role="banner">
+      <div class="header-inner">
+        <div class="logo">PEEKSEE</div>
+      </div>
+    </header>
+
+    <main>
+      <nav class="header-nav" role="navigation" aria-label="Primary navigation">
+        <div class="nav-inner">
+          <div class="nav-scroll">
+            <a class="nav-item" href="index.html">Home</a>
+            <a class="nav-item" href="creations.html">Creations</a>
+            <a class="nav-item" href="creators.html">Creators</a>
+            <a class="nav-item" href="titles.html">Titles</a>
+            <a class="nav-item" href="upload.html">Upload</a>
+            <a class="nav-item" href="contact.html">Contact</a>
+          </div>
+        </div>
+      </nav>
+
+      <section id="creator-profile">
+        <h2 id="creator-name">Creator</h2>
+        <div id="creator-bio" class="creator-bio"></div>
+
+        <h3>Their creations</h3>
+        <div id="creator-creations" class="creations-grid"></div>
+
+        <h3>Leave feedback or support</h3>
+        <form id="creator-feedback">
+          <div class="field">
+            <label for="fb-name">Your name</label
+            ><input id="fb-name" type="text" />
+          </div>
+          <div class="field">
+            <label for="fb-email">Your email</label
+            ><input id="fb-email" type="email" />
+          </div>
+          <div class="field">
+            <label for="fb-message">Message</label
+            ><textarea id="fb-message"></textarea>
+          </div>
+          <div style="display: flex; gap: 8px; align-items: center">
+            <button id="fb-love" type="button" class="upload-button">
+              Send Love</button
+            ><button id="fb-hate" type="button">Send Hate</button
+            ><button id="fb-donate" type="button" class="upload-button">
+              Donate
+            </button>
+          </div>
+        </form>
+      </section>
+    </main>
+
+    <footer>
+      <p>&copy; 2025 PEEKSEE</p>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>

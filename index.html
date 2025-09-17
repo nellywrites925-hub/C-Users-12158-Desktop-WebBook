@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PEEKSEE</title>
+    <!-- Link to CSS File -->
+    <link rel="stylesheet" href="style.css" />
+    <!-- Decorative font for logo -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+
+  <body>
+    <header class="site-header" role="banner">
+      <div class="header-inner">
+        <div class="header-left">
+          <button id="theme-toggle" class="nav-button" aria-label="Toggle theme">Light</button>
+        </div>
+        <div class="logo">PEEKSEE</div>
+      </div>
+    </header>
+
+    <main>
+      <nav class="header-nav" role="navigation" aria-label="Primary navigation">
+        <div class="nav-inner">
+          <div class="nav-scroll">
+            <a class="nav-item" href="index.html">Home</a>
+            <a class="nav-item" href="creations.html">Creations</a>
+            <a class="nav-item" href="creators.html">Creators</a>
+            <a class="nav-item" href="genres.html">Discover</a>
+            <a class="nav-item" href="upload.html">Upload</a>
+            <span id="sub-status" style="margin-left: 12px; font-weight: 600"
+              >Not subscribed</span
+            >
+            <button id="sub-toggle" class="nav-button" style="margin-left: 8px">
+              Subscribe
+            </button>
+            <!-- theme toggle moved to header for quicker access -->
+            <a class="nav-item" href="contact.html">Contact Us</a>
+          </div>
+        </div>
+      </nav>
+
+      <section id="home">
+        <div class="hero">
+          <div class="hero-inner">
+            <div class="hero-copy">
+              <h1>Peeksee — A Local-First Media Gallery</h1>
+              <p class="lead">
+                Upload and preview your own photos, audio, or video locally —
+                stored in your browser for private-first sharing. Subscribe for
+                extra perks, or browse featured creators and recent creations.
+              </p>
+              <p class="hero-ctas">
+                <a href="creations.html" class="upload-button"
+                  >Explore Creations</a
+                >
+                <a
+                  href="#support-us"
+                  class="upload-button secondary"
+                  id="support-cta"
+                  >Support</a
+                >
+              </p>
+            </div>
+            <div class="hero-media">
+              <div class="hero-card">
+                A featured title or image could appear here.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Featured user video and bio -->
+        <section id="featured" style="margin-top: 18px">
+          <h3>Featured Creator</h3>
+          <div class="featured-row">
+            <div class="featured-media">
+              <video
+                id="featured-video"
+                controls
+                style="width: 100%; background: #000"
+              >
+                Your browser does not support the video element.
+              </video>
+              <div style="margin-top:8px; text-align:right;">
+                <button id="featured-reload" class="nav-button">Reload Video</button>
+              </div>
+            </div>
+            <div class="featured-bio" id="featured-bio">
+              <h4 id="featured-name">Creator Name</h4>
+              <p id="featured-intro">
+                Creator introduction or bio will appear here when available.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <!-- Creations grid: show up to 5 items -->
+        <section id="creations" style="margin-top: 18px">
+          <h3>Featured Creations</h3>
+          <div id="creations-grid" class="creations-grid"></div>
+        </section>
+        <section id="support-us" style="margin-top: 18px">
+          <h3>Support PEEKSEE</h3>
+          <p>
+            If you like this site, you can support development via one-time
+            donations or subscriptions.
+          </p>
+          <div class="payments">
+            <div class="payment-item">
+              <a
+                class="upload-button"
+                href="https://www.buymeacoffee.com/"
+                target="_blank"
+                rel="noopener"
+                >Buy Me a Coffee</a
+              >
+            </div>
+            <div class="payment-item">
+              <!-- PayPal donate link (replace with your PayPal.me or hosted button) -->
+              <a
+                class="upload-button"
+                href="https://www.paypal.com/donate"
+                target="_blank"
+                rel="noopener"
+                >Donate via PayPal</a
+              >
+            </div>
+            <div class="payment-item">
+              <!-- Stripe Checkout button: requires a server endpoint to create a Checkout Session -->
+              <button id="stripe-checkout" class="upload-button">
+                Subscribe (Stripe)
+              </button>
+            </div>
+          </div>
+        </section>
+      </section>
+
+      <!-- Carousel for up to 5 featured creators -->
+      <section id="featured-carousel" style="margin-top: 18px">
+        <h3>Spotlight</h3>
+        <div id="carousel-container" class="carousel-container"></div>
+      </section>
+
+      <section id="background-selector" style="margin-top: 18px">
+        <h3>Stage Background (choose one)</h3>
+        <div style="display: flex; gap: 8px; align-items: center">
+          <button
+            class="bg-choice upload-button"
+            data-url="https://images.unsplash.com/photo-1517604931442-7f8a3cb81005?q=80&w=1600&auto=format&fit=crop&ixlib=rb-4.0.3&s=1"
+          >
+            Stage 1
+          </button>
+          <button
+            class="bg-choice upload-button"
+            data-url="https://images.unsplash.com/photo-1508973378-3a9d0c6a6a23?q=80&w=1600&auto=format&fit=crop&ixlib=rb-4.0.3&s=2"
+          >
+            Stage 2
+          </button>
+          <button
+            class="bg-choice upload-button"
+            data-url="https://images.unsplash.com/photo-1526403224746-4c5b55a6b892?q=80&w=1600&auto=format&fit=crop&ixlib=rb-4.0.3&s=3"
+          >
+            Stage 3
+          </button>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <p>&copy; 2025 PEEKSEE. All rights reserved.</p>
+      <div class="bg-attribution" aria-live="polite"></div>
+    </footer>
+
+    <!-- Link to JavaScript (.js) File-->
+    <script src="script.js"></script>
+  </body>
+</html>

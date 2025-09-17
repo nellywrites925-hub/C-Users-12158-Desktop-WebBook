@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Subscribe - Peeksee</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header class="site-header" role="banner">
+      <div class="header-inner">
+        <div class="logo">PEEKSEE</div>
+      </div>
+    </header>
+
+    <main>
+      <nav class="header-nav" role="navigation" aria-label="Primary navigation">
+        <div class="nav-inner">
+          <div class="nav-scroll">
+            <a class="nav-item" href="index.html">Home</a>
+            <a class="nav-item" href="creations.html">Creations</a>
+            <a class="nav-item" href="creators.html">Creators</a>
+            <a class="nav-item" href="genres.html">Discover</a>
+            <a class="nav-item" href="subscribe.html">Subscribe</a>
+            <a class="nav-item" href="upload.html">Upload</a>
+            <a class="nav-item" href="contact.html">Contact</a>
+          </div>
+        </div>
+      </nav>
+
+      <section>
+        <h2>Subscribe</h2>
+        <p>
+          Support this site by subscribing for $10. Subscribers receive updates
+          and early access to featured content.
+        </p>
+
+        <form id="subscribe-form" style="max-width: 520px">
+          <div
+            style="
+              display: flex;
+              gap: 8px;
+              align-items: center;
+              margin-bottom: 12px;
+            "
+          >
+            <label for="sub-email" style="min-width: 80px">Email</label>
+            <input
+              id="sub-email"
+              type="email"
+              placeholder="you@example.com"
+              required
+              style="
+                flex: 1;
+                padding: 8px;
+                border-radius: 6px;
+                border: 1px solid rgba(0, 0, 0, 0.08);
+              "
+            />
+          </div>
+          <div style="margin-bottom: 12px">
+            <button id="subscribe-pay" class="upload-button" type="button">
+              Subscribe $10
+            </button>
+            <div
+              id="subscribe-status"
+              class="muted"
+              style="display: inline-block; margin-left: 8px"
+            ></div>
+          </div>
+        </form>
+
+        <p class="muted">
+          Payments are processed via Stripe Checkout (server required). This
+          button attempts to call <code>/create-checkout-session</code> on the
+          server.
+        </p>
+      </section>
+    </main>
+
+    <footer>
+      <button id="stripe-checkout">Subscribe for $10/month</button>
+      <div style="margin-top: 12px">
+        <span id="sub-status-subscribe" style="font-weight: 600"
+          >Not subscribed</span
+        >
+        <button id="sub-toggle-subscribe" class="upload-button">
+          Subscribe / Cancel (local)
+        </button>
+      </div>
+    </footer>
+
+    <script>
+      document.getElementById("subscribe-pay") &&
+        document
+          .getElementById("subscribe-pay")
+          .addEventListener("click", function () {
+            var email = document.getElementById("sub-email").value.trim();
+            if (!email) {
+              document.getElementById("subscribe-status").textContent =
+                "Please enter an email";
+              return;
+            }
+            document.getElementById("subscribe-status").textContent =
+              "Initializing...";
+            fetch("/create-checkout-session", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                priceId: "replace_with_price_id",
+                email: email,
+                amount: 1000,
+              }),
+            })
+              .then(function (r) {
+                if (!r.ok) throw new Error("Server error");
+                return r.json();
+              })
+              .then(function (json) {
+                if (json && json.id) {
+                  document.getElementById("subscribe-status").textContent =
+                    "Redirecting to Checkout...";
+                  if (!window.Stripe) {
+                    var s = document.createElement("script");
+                    s.src = "https://js.stripe.com/v3/";
+                    s.onload = function () {
+                      var stripe = Stripe(json.publicKey || "");
+                      stripe.redirectToCheckout({ sessionId: json.id });
+                    };
+                    document.head.appendChild(s);
+                  } else {
+                    var stripe = Stripe(json.publicKey || "");
+                    stripe.redirectToCheckout({ sessionId: json.id });
+                  }
+                } else {
+                  throw new Error("Invalid server response");
+                }
+              })
+              .catch(function (err) {
+                document.getElementById("subscribe-status").textContent =
+                  "Payment not configured or failed";
+                console.error(err);
+              });
+          });
+    </script>
+  </body>
+</html>

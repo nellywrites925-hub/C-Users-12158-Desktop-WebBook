@@ -1,0 +1,873 @@
+/* Basic reset */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  /* Custom brand palette provided by user */
+  --brand-purple: #BF00FF; /* primary magenta/purple */
+  --brand-bright-purple: #BF00FF;
+  --brand-purple-100: #F8F4FF; /* soft light purple for nav/background accents */
+  --brand-light-purple: #F8F4FF;
+  --brand-gold: #D4AF37;
+  --brand-purple-700: #010B13; /* deep near-black for strong contrast */
+  --brand-purple-shadow: rgba(191, 0, 255, 0.16);
+  --brand-black: #010B13;
+  --bg-color: #010B13;
+  --text-color: #F8F8FF;
+  --muted-color: #F8F4FF;
+}
+
+.header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: center; /* center content horizontally */
+  width: 100%;
+  padding: 0 16px;
+}
+.header-left {
+  position: absolute;
+  left: 16px;
+  top: 8px;
+  z-index: 1010;
+}
+.header-left .nav-button {
+  background: rgba(255,255,255,0.08);
+  color: #fff;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 6px;
+}
+.logo {
+  font-family: "Playfair Display", serif;
+  font-weight: 900;
+  margin-right: 0;
+  width: auto; /* allow the text to size naturally so it centers */
+  font-size: 1.6rem;
+  line-height: 1;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.06);
+  z-index: 1000;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--brand-purple);
+  color: #fff;
+  padding: 6px 12px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px var(--brand-purple-shadow);
+}
+
+@media (min-width: 900px) {
+  .logo {
+    font-size: 2.1rem;
+    width: 200px;
+  }
+}
+
+/* Floating animation for logo: subtle back-and-forth */
+@keyframes float-across {
+  0% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(24px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+.logo {
+  animation: float-across 6s ease-in-out infinite;
+}
+.logo:hover,
+.logo:focus {
+  animation-play-state: paused;
+}
+
+/* Navigation that scrolls horizontally when items overflow
+ 	 NOTE: the nav is placed outside the header in the DOM but we
+ 	 visually position it in the top bar using fixed positioning. */
+.header-nav {
+  position: fixed;
+  top: 64px; /* position beneath the header */
+  left: 0;
+  right: 0;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  z-index: 1001; /* sit under the header */
+  background: var(--brand-purple-100); /* soft light purple for nav bar */
+  pointer-events: auto;
+}
+
+/* center-aligned container for nav items to match header-inner */
+.nav-inner {
+  width: 100%;
+  padding: 0 16px;
+  display: flex;
+  justify-content: center;
+}
+.nav-scroll {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 8px 16px; /* horizontal padding for touch targets */
+  align-items: center;
+  height: 100%;
+}
+
+@media (min-width: 700px) {
+  .nav-scroll {
+    justify-content: center;
+    overflow-x: visible;
+  }
+}
+.nav-scroll::-webkit-scrollbar {
+  height: 8px;
+}
+.nav-scroll::-webkit-scrollbar-thumb {
+  background: rgba(107,33,168,0.3);
+  border-radius: 4px;
+}
+.nav-item {
+  color: var(--brand-purple-700); /* darker purple for contrast on light nav background */
+  text-decoration: none;
+  padding: 6px 10px;
+  white-space: nowrap;
+  border-radius: 6px;
+}
+.nav-item:hover {
+  background: rgba(0, 0, 0, 0.04);
+}
+
+/* Main layout padding to account for fixed header + nav */
+main {
+  padding: 136px 16px 32px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.hero {
+  margin-bottom: 24px;
+}
+.content p {
+  margin-bottom: 12px;
+}
+
+footer {
+  text-align: center;
+  padding: 24px 16px;
+  color: #666;
+}
+
+/* Upload UI styles (formerly docs page) */
+.upload-panel {
+  margin: 16px 0 24px;
+  display: grid;
+  gap: 12px;
+}
+.upload-button {
+  display: inline-block;
+  background: var(--brand-purple);
+  color: #fff;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.drop-area {
+  border: 2px dashed rgba(0, 0, 0, 0.08);
+  padding: 18px;
+  border-radius: 8px;
+  background: var(--brand-purple);
+  color: #fff;
+  text-align: center;
+}
+.record-controls {
+  display: flex;
+  gap: 8px;
+}
+.uploads-list {
+  display: grid;
+  gap: 8px;
+  margin-top: 12px;
+}
+.upload-item {
+  padding: 8px;
+  border-radius: 6px;
+  background: var(--brand-purple);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  color: #fff;
+}
+.upload-item .info {
+  flex: 1;
+}
+.upload-item video,
+.upload-item audio {
+  max-width: 240px;
+}
+
+/* Thumbnail layout for uploads list */
+.upload-thumb {
+  width: 96px;
+  height: 96px;
+  flex: 0 0 96px;
+  border-radius: 8px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255,255,255,0.06);
+}
+.upload-thumb img,
+.upload-thumb video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.upload-item .actions {
+  margin-left: auto;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.thumb-delete {
+  background: rgba(0,0,0,0.18);
+  color: #fff;
+  border: none;
+  padding: 6px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+/* Ensure card/containers remain purple in light theme too */
+body.light .upload-item,
+body.light .creation-card,
+body.light .hero-card,
+body.light .featured-bio,
+body.light #diagnostics,
+body.light .drop-area {
+  background: var(--brand-purple) !important;
+  color: #fff !important;
+  border-color: rgba(255,255,255,0.06) !important;
+}
+
+/* Admin specific tweaks */
+.upload-item button {
+  margin-left: 8px;
+}
+.upload-item a {
+  color: var(--brand-purple-700);
+  text-decoration: none;
+}
+.upload-button {
+  border: none;
+}
+
+/* Toast notifications */
+#toast-container {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.toast {
+  background: linear-gradient(180deg, rgba(107,33,168,0.95), rgba(124,58,237,0.92));
+  color: #fff;
+  padding: 10px 14px;
+  border-radius: 8px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+  opacity: 0;
+  transform: translateY(8px);
+  transition: transform 220ms ease, opacity 220ms ease;
+  max-width: 320px;
+}
+.toast.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Contact form styles */
+.contact-form {
+  display: grid;
+  gap: 14px;
+  max-width: 700px;
+}
+.contact-form .field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* spacing helper to increase vertical space between grouped fields */
+.contact-form .field--spaced {
+  margin-top: 12px;
+  margin-bottom: 18px;
+}
+.contact-form input[type="text"],
+.contact-form input[type="email"],
+.contact-form textarea {
+  padding: 8px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 6px;
+}
+.contact-form button {
+  background: var(--brand-purple);
+  color: #fff;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+/* Purple accents for interactive elements */
+.nav-item:hover,
+.nav-button:hover,
+.upload-button:hover,
+.contact-form button:hover {
+  box-shadow: 0 6px 20px rgba(107,33,168,0.14);
+  transform: translateY(-1px);
+}
+
+/* Make small badges use purple */
+.creation-card .badge .b {
+  background: linear-gradient(90deg, rgba(107,33,168,0.95), rgba(124,58,237,0.95));
+  color: #fff;
+}
+
+/* Logo emphasis border */
+.logo::after {
+  content: '';
+  display: block;
+  height: 4px;
+  width: 100%;
+  border-radius: 4px;
+  margin-top: 6px;
+  background: linear-gradient(90deg, var(--brand-purple), var(--brand-bright-purple));
+  opacity: 0.95;
+}
+.contact-form .muted {
+  color: #666;
+  margin-top: 6px;
+}
+
+/* Responsive tweaks */
+@media (min-width: 900px) {
+  .header-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  .nav-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+}
+
+/* Hero section */
+.hero {
+  background: linear-gradient(
+    135deg,
+    rgba(124, 58, 237, 0.08),
+    rgba(124, 58, 237, 0.02)
+  );
+  border-radius: 12px;
+  padding: 28px;
+  margin-bottom: 18px;
+}
+.hero-inner {
+  display: flex;
+  gap: 18px;
+  align-items: center;
+}
+.hero-copy {
+  flex: 1;
+}
+.hero h1 {
+  font-family: "Playfair Display", serif;
+  font-size: 2rem;
+  margin-bottom: 8px;
+}
+.lead {
+  color: #444;
+  margin-bottom: 12px;
+}
+.hero-ctas .upload-button {
+  margin-right: 8px;
+}
+.hero-media {
+  width: 320px;
+}
+.hero-card {
+  background: var(--brand-purple);
+  border-radius: 10px;
+  padding: 18px;
+  box-shadow: 0 6px 18px var(--brand-purple-shadow);
+  color: #fff;
+  min-height: 160px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+@media (max-width: 700px) {
+  .hero-inner {
+    flex-direction: column;
+  }
+  .hero-media {
+    width: 100%;
+  }
+}
+
+/* Featured creator block */
+.featured-row {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+}
+.featured-media {
+  flex: 2 1 70%;
+  max-width: 920px;
+}
+.featured-bio {
+  flex: 1 1 30%;
+  background: var(--brand-purple);
+  padding: 16px;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px var(--brand-purple-shadow);
+  color: #fff;
+}
+
+.creations-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 12px;
+  margin-top: 12px;
+}
+.creation-card {
+  background: var(--brand-purple);
+  padding: 10px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px var(--brand-purple-shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+  color: #fff;
+}
+.creation-card img,
+.creation-card video {
+  max-width: 100%;
+  border-radius: 6px;
+}
+
+/* Ensure equal height cards and clickable area */
+.creation-card {
+  height: 220px;
+  overflow: hidden;
+  justify-content: flex-start;
+  cursor: pointer;
+}
+.creation-card .media-wrap {
+  flex: 1 1 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+.creation-card .media-wrap img,
+.creation-card .media-wrap video,
+.creation-card .media-wrap audio {
+  max-height: 140px;
+  max-width: 100%;
+}
+.creation-card .title {
+  padding-top: 6px;
+  text-align: center;
+  width: 100%;
+}
+
+/* card action icons */
+.creation-card .card-actions {
+  position: absolute;
+  left: 8px;
+  bottom: 8px;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.creation-card .card-actions .icon-btn {
+  background: rgba(0, 0, 0, 0.45);
+  color: #fff;
+  border: none;
+  padding: 6px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 16px;
+}
+.creation-card {
+  position: relative;
+}
+
+.icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.icon-heart {
+  color: #ff5a78;
+  font-size: 16px;
+}
+.icon-trash {
+  color: #fff;
+  font-size: 16px;
+}
+
+/* modal comments */
+#modal-comments .comment {
+  padding: 8px 10px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.03);
+  margin-bottom: 8px;
+}
+#modal-comments .comment .meta {
+  font-size: 0.82rem;
+  color: var(--muted-color);
+  margin-bottom: 6px;
+}
+#modal-comments .comment .text {
+  color: var(--text-color);
+}
+
+/* Stage background (temporary SVG) */
+:root {
+  --brand-bright-purple: #7c3aed; /* Bright Purple */
+  --brand-light-purple: #c4b5fd; /* Light Purple */
+  --brand-gold: #f59e0b; /* Gold */
+  --brand-black: #000000;
+  --bg-color: #0b0b0b;
+  --text-color: #eaeaea;
+  --muted-color: #bdbdbd;
+}
+
+body {
+  background-image: url("https://images.unsplash.com/photo-1505685296765-3a2736de412f?q=80&w=1600&auto=format&fit=crop&ixlib=rb-4.0.3&s=placeholder");
+  background-size: cover;
+  background-attachment: fixed;
+  background-position: center center;
+  color: var(--text-color);
+  background-color: rgba(11, 11, 11, 0.6);
+}
+
+/* Default stage background (stage 1). Use the same images available in the selector. */
+body {
+  background-image: url("https://images.unsplash.com/photo-1517604931442-7f8a3cb81005?q=80&w=1600&auto=format&fit=crop&ixlib=rb-4.0.3&s=1");
+  background-size: cover;
+  background-attachment: fixed;
+  background-position: center center;
+  color: var(--text-color);
+  background-color: rgba(11, 11, 11, 0.6);
+  position: relative;
+}
+
+/* strong overlay for content readability over background images */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(rgba(0,0,0,0.58), rgba(0,0,0,0.58));
+  pointer-events: none;
+  z-index: 0;
+}
+.site-header, main, footer { position: relative; z-index: 1; }
+
+/* Light theme overrides */
+body.light {
+  --bg-color: #ffffff;
+  --text-color: #111827;
+  --muted-color: #6b7280;
+  background-color: #fff;
+  filter: none;
+}
+
+/* Theme aware header and buttons */
+.site-header {
+  background: linear-gradient(
+    90deg,
+    var(--brand-bright-purple),
+    var(--brand-light-purple)
+  );
+  color: #fff;
+}
+.upload-button {
+  background: var(--brand-gold);
+  color: var(--brand-black);
+  border: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.upload-button.secondary {
+  background: transparent;
+  color: var(--text-color);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+.nav-button {
+  background: transparent;
+  color: var(--text-color);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 6px 8px;
+  border-radius: 6px;
+}
+
+/* If light theme, adjust header colors */
+body.light .site-header {
+  background: linear-gradient(90deg, var(--brand-light-purple), #fff);
+  color: var(--brand-black);
+}
+body.light .upload-button {
+  color: var(--brand-black);
+}
+
+/* Dark-mode explicit overrides (default when body does NOT have .light) */
+body:not(.light) {
+  /* make sure the global text color is bright for readability */
+  --text-color: #ffffff;
+  --muted-color: #cfcfcf;
+  color: var(--text-color);
+}
+
+/* Ensure commonly white card/section backgrounds switch to subtle dark panels in dark mode */
+body:not(.light) .drop-area,
+body:not(.light) .upload-item,
+body:not(.light) .hero-card,
+body:not(.light) .featured-bio,
+body:not(.light) .creation-card,
+body:not(.light) #diagnostics,
+body:not(.light) .contact-form input,
+body:not(.light) .contact-form textarea {
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--text-color);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+/* Navigation and small controls should also become light for contrast */
+body:not(.light) .nav-item,
+body:not(.light) .nav-item,
+body:not(.light) .nav-button,
+body:not(.light) .upload-button.secondary {
+  /* keep nav text dark even in dark layout so it contrasts against the light nav bar */
+  color: #2b0048; /* dark purple */
+  border-color: rgba(43,0,72,0.06);
+}
+
+/* Also ensure nav text is dark on light theme explicitly */
+body.light .nav-item,
+body.light .nav-button {
+  color: #2b0048;
+}
+
+/* Hero and lead copy */
+body:not(.light) .hero h1,
+body:not(.light) .hero-copy,
+body:not(.light) .lead {
+  color: var(--text-color);
+}
+
+/* Creators page: ensure headings and list items are readable in dark mode */
+body:not(.light) #creators-list h2,
+body:not(.light) #creators-list p,
+body:not(.light) #creators-list .creators-ol,
+body:not(.light) #creators-list .creators-ol li {
+  color: var(--text-color);
+}
+
+/* If creators are rendered as cards, make sure card backgrounds are dark panels */
+body:not(.light) .creator-card,
+body:not(.light) .creator-highlight {
+  background: rgba(255,255,255,0.03);
+  color: var(--text-color);
+  border: 1px solid rgba(255,255,255,0.05);
+}
+
+/* Modal comment text */
+body:not(.light) #modal-comments .comment {
+  background: rgba(255,255,255,0.03);
+  color: var(--text-color);
+}
+
+/* Ensure inputs show white text on dark */
+body:not(.light) .contact-form input,
+body:not(.light) .contact-form textarea {
+  color: var(--text-color);
+}
+
+/* small badges for counts on creation cards */
+.creation-card .badge {
+  position: absolute;
+  right: 8px;
+  top: 8px;
+  display: flex;
+  gap: 6px;
+}
+.creation-card .badge .b {
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  padding: 4px 6px;
+  border-radius: 12px;
+  font-size: 12px;
+}
+body.light .creation-card .badge .b {
+  background: rgba(255, 255, 255, 0.9);
+  color: #111;
+}
+
+/* attribution area */
+.bg-attribution {
+  margin-top: 12px;
+  font-size: 0.85rem;
+  color: var(--muted-color);
+}
+
+/* Fullscreen modal */
+.creation-modal {
+  position: fixed;
+  inset: 0;
+  display: none;
+  background: rgba(0, 0, 0, 0.85);
+  align-items: center;
+  justify-content: center;
+  z-index: 12000;
+}
+.creation-modal[aria-hidden="false"] {
+  display: flex;
+}
+.creation-modal-inner {
+  max-width: 95%;
+  max-height: 95%;
+  /* dark translucent panel so media is visible but controls/captions are readable */
+  background: rgba(6, 6, 6, 0.9);
+  color: #fff;
+  padding: 16px;
+  border-radius: 8px;
+  overflow: auto;
+  text-align: center;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+}
+.creation-modal-inner video,
+.creation-modal-inner img,
+.creation-modal-inner audio {
+  max-width: 100%;
+  max-height: 80vh;
+  border-radius: 6px;
+}
+.creation-modal-inner .upload-button {
+  position: absolute;
+  right: 20px;
+  top: 20px;
+  z-index: 12001;
+}
+.creation-modal #creation-modal-caption {
+  margin-top: 8px;
+  color: #ddd;
+}
+
+/* Make featured video larger and more prominent */
+#featured .featured-media video {
+  width: 100%;
+  max-height: 540px;
+  border-radius: 8px;
+  background: #000;
+}
+
+/* Ensure featured video displays properly and fits its container */
+#featured .featured-media video {
+  display: block;
+  object-fit: contain;
+}
+.creation-card .title {
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+@media (max-width: 700px) {
+
+/* modal control numeric badges */
+.modal-controls .count { margin-left:6px; font-weight:700; }
+
+  .featured-row {
+    flex-direction: column;
+  }
+}
+
+/* Force 3 columns on wide screens for the creations page */
+@media (min-width: 1000px) {
+  .creations-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* Highlight for newly created creator entries */
+.creator-highlight {
+  box-shadow: 0 6px 18px rgba(124, 58, 237, 0.18);
+  transform: scale(1.02);
+  transition: transform 220ms ease;
+}
+
+/* Simple diagnostics panel */
+#diagnostics {
+  background: var(--brand-purple);
+  padding: 12px;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px var(--brand-purple-shadow);
+  margin-top: 12px;
+  max-height: 300px;
+  overflow: auto;
+  color: #fff;
+}
+
+/* Carousel */
+.carousel-container {
+  position: relative;
+  min-height: 220px;
+  overflow: hidden;
+  border-radius: 8px;
+}
+.carousel-slide {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  gap: 18px;
+  align-items: center;
+  padding: 12px;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.02),
+    rgba(255, 255, 255, 0.02)
+  );
+  opacity: 0;
+  transform: translateX(8px);
+  transition: opacity 400ms ease, transform 400ms ease;
+}
+.carousel-slide.visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+.carousel-slide .left {
+  flex: 1;
+}
+.carousel-slide .right {
+  width: 260px;
+}

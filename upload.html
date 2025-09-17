@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Upload - Peeksee</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header class="site-header" role="banner">
+      <div class="header-inner">
+        <div class="logo">PEEKSEE</div>
+      </div>
+    </header>
+
+    <main>
+      <nav class="header-nav" role="navigation" aria-label="Primary navigation">
+        <div class="nav-inner">
+          <div class="nav-scroll">
+            <a class="nav-item" href="index.html">Home</a>
+            <div style="margin-top: 12px">
+              <span id="sub-status-upload" style="font-weight: 600"
+                >Not subscribed</span
+              >
+              <button id="sub-toggle-upload" class="upload-button">
+                Subscribe / Cancel
+              </button>
+            </div>
+            <a class="nav-item" href="creations.html">Creations</a>
+            <a class="nav-item" href="creators.html">Creators</a>
+            <a class="nav-item" href="genres.html">Discover</a>
+            <a class="nav-item" href="subscribe.html">Subscribe</a>
+            <a class="nav-item" href="upload.html">Upload</a>
+            <a class="nav-item" href="contact.html">Contact</a>
+          </div>
+        </div>
+      </nav>
+
+      <section id="upload-panel">
+        <h2>Upload</h2>
+        <p>
+          Share documents, videos, or recordings. Files are stored locally in
+          your browser (IndexedDB) and will be available on this device and
+          browser only.
+        </p>
+
+        <div class="upload-panel">
+          <div class="field">
+            <label for="upload-creator">Creator</label>
+            <div style="display: flex; gap: 8px; align-items: center">
+              <select id="upload-creator">
+                <option value="">(none)</option>
+              </select>
+              <input
+                id="upload-creator-new"
+                type="text"
+                placeholder="Add new creator name"
+              />
+              <button id="upload-creator-add" class="upload-button">Add</button>
+            </div>
+          </div>
+
+          <div style="display: flex; gap: 12px; align-items: center">
+            <label class="upload-button" for="file-input">Choose files</label>
+            <input id="file-input" type="file" multiple style="display: none" />
+            <label style="display: flex; align-items: center; gap: 8px">
+              <input id="ownership-confirm" type="checkbox" /> I confirm I have
+              rights or permission to upload these files</label
+            >
+          </div>
+
+          <div
+            id="drop-area"
+            class="drop-area"
+            tabindex="0"
+            aria-label="Drop files here"
+          >
+            <p>Or drag &amp; drop files here</p>
+          </div>
+
+          <div class="record-controls">
+            <button id="record-audio">Start Audio Recording</button>
+            <button id="record-video">Start Video Recording</button>
+          </div>
+
+          <div class="upload-notes">
+            <small
+              >Allowed: documents, images, audio, video. Max per file: 25MB
+              (browser limits may vary).</small
+            >
+          </div>
+        </div>
+
+        <h3>Your uploads</h3>
+        <div id="uploads-list" class="uploads-list" aria-live="polite"></div>
+      </section>
+    </main>
+
+    <footer>
+      <p>&copy; 2025 PEEKSEE</p>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>

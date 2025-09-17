@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Creations - Peeksee</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header class="site-header" role="banner">
+      <div class="header-inner">
+        <div class="logo">PEEKSEE</div>
+      </div>
+    </header>
+
+    <main>
+      <nav class="header-nav" role="navigation" aria-label="Primary navigation">
+        <div class="nav-inner">
+          <div class="nav-scroll">
+            <a class="nav-item" href="index.html">Home</a>
+            <a class="nav-item" href="creations.html">Creations</a>
+            <a class="nav-item" href="creators.html">Creators</a>
+            <a class="nav-item" href="genres.html">Discover</a>
+            <a class="nav-item" href="subscribe.html">Subscribe</a>
+            <a class="nav-item" href="upload.html">Upload</a>
+            <a class="nav-item" href="contact.html">Contact</a>
+          </div>
+        </div>
+      </nav>
+
+      <section>
+        <h2>Creations</h2>
+        <p>Browse community uploads. Click any card to open fullscreen.</p>
+        <div id="creations-container">
+          <div id="creations-grid" class="creations-grid"></div>
+        </div>
+
+        <!-- fullscreen modal for viewing creations -->
+        <div id="creation-modal" class="creation-modal" aria-hidden="true">
+          <div class="creation-modal-inner">
+            <button id="creation-modal-close" class="upload-button">
+              Close
+            </button>
+            <div id="creation-modal-body"></div>
+            <div id="creation-modal-caption" class="muted"></div>
+            <div
+              class="modal-controls"
+              style="
+                margin-top: 12px;
+                display: flex;
+                gap: 8px;
+                align-items: center;
+                justify-content: center;
+              "
+            >
+              <button
+                id="modal-like"
+                class="icon-btn"
+                data-id="0"
+                aria-label="Love"
+              >
+                <span class="icon-heart" aria-hidden="true">❤</span>
+                <span class="sr-only">Love</span>
+              </button>
+              <button
+                id="modal-dislike"
+                class="icon-btn"
+                data-id="0"
+                aria-label="Trash"
+              >
+                <span class="icon-trash" aria-hidden="true">🗑️</span>
+                <span class="sr-only">Trash</span>
+              </button>
+              <div style="display: flex; align-items: center; gap: 8px">
+                <input
+                  id="modal-comment-input"
+                  placeholder="Add a comment"
+                  style="
+                    padding: 6px 8px;
+                    border-radius: 6px;
+                    border: 1px solid #ccc;
+                    min-width: 200px;
+                  "
+                />
+                <button
+                  id="modal-comment-post"
+                  class="upload-button"
+                  data-id="0"
+                >
+                  Post
+                </button>
+                <button id="modal-close-inline" class="upload-button">Close</button>
+              </div>
+              <div
+                id="modal-engage-meta"
+                class="muted"
+                style="margin-left: 8px"
+              ></div>
+            </div>
+            <div
+              id="modal-comments"
+              style="
+                margin-top: 12px;
+                text-align: left;
+                max-height: 180px;
+                overflow: auto;
+                background: rgba(255, 255, 255, 0.02);
+                padding: 8px;
+                border-radius: 6px;
+              "
+            >
+              <!-- comments will be rendered here -->
+            </div>
+          </div>
+        </div>
+        <!-- diagnostics panel -->
+        <div
+          style="margin-top: 12px; display: flex; gap: 8px; align-items: center"
+        >
+          <button id="run-diagnostics" class="upload-button">
+            Run Diagnostics
+          </button>
+          <div class="muted">
+            Click to inspect stored uploads for playback troubleshooting.
+          </div>
+        </div>
+        <div id="diagnostics"></div>
+      </section>
+    </main>
+
+    <footer>
+      <p>&copy; 2025 PEEKSEE</p>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>
